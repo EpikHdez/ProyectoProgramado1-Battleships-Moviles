@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Battleships</string>
+
+    <!-- Strings related to Facebook -->
+    <string name="facebook_app_id">259410561266895</string>
+    <string name="fb_login_protocol_scheme">fb259410561266895</string>
+
+</resources>
