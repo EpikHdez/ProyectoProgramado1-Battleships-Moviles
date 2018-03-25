@@ -98,10 +98,11 @@ public class LoginActivity extends AppCompatActivity {
      * this one.
      */
     private void openHomeActivity() {
-        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
 
-        finish();
+        //Uncomment to finish this activity and avoid going back here when the back button is pressed.
+        //finish();
     }
 
     /**
@@ -121,8 +122,7 @@ public class LoginActivity extends AppCompatActivity {
      * @param view the view that called the method.
      */
     public void onBtnRegisterWithEmailClicked(View view) {
-        if(view.getId() == R.id.btnRegisterWIthEmail) {
-            //TODO open the register with email activity
-        }
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
     }
 }
