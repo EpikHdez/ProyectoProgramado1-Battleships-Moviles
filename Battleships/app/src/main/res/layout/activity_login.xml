@@ -28,15 +28,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="30dp" />
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="80dp" />
 
             <Button
                 android:id="@+id/btnRegisterWIthEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/registerWithEmail" />
+                android:text="@string/btnRegisterWithEmail"
+                android:onClick="onBtnRegisterWithEmailClicked" />
 
         </LinearLayout>
     </RelativeLayout>

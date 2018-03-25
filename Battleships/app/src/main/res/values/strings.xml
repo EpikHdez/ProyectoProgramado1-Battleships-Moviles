@@ -7,7 +7,11 @@
     <!-- Strings related to Facebook -->
 
     <!-- String related to login activity -->
-    <string name="registerWithEmail">Registrarse con email</string>
+    <string name="btnRegisterWithEmail">Registrarse con email</string>
+    <string name="onFacebookLoginError">Ha ocurrido un error al iniciar sesión con facebook,
+        intentelo de nuevo más tarde.</string>
+    <string name="onFacebookLoginCancelled">Se ha cancelado el inicio de sesión, debe iniciar sesión
+        para poder continuar.</string>
     <!-- String related to login activity -->
 
 </resources>
