@@ -2,6 +2,7 @@ package com.boom.battleships;
 
 import android.app.Application;
 
+import com.boom.battleships.asynctasks.APICalls;
 import com.cloudinary.android.MediaManager;
 
 /**
@@ -14,5 +15,6 @@ public class MyCustomApplication extends Application {
         super.onCreate();
 
         MediaManager.init(getApplicationContext());
+        APICalls.init(getApplicationContext());
     }
 }

@@ -14,5 +14,5 @@ public interface AsyncTaskRequester {
      *
      * @param response the response from the async task
      */
-    void receiveResponse(Object response);
+    void receiveAsyncResponse(Object response);
 }

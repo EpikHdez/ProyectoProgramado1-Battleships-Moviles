@@ -11,17 +11,24 @@ import android.support.media.ExifInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.boom.battleships.R;
+import com.boom.battleships.asynctasks.APICalls;
+import com.boom.battleships.asynctasks.UploadImage;
+import com.boom.battleships.interfaces.ApiCallRequester;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class RegisterActivity extends AppCompatActivity implements AsyncTaskRequester {
+public class RegisterActivity extends AppCompatActivity implements AsyncTaskRequester, ApiCallRequester {
+    private Uri selectedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskRequ
                 Uri imageUri = data.getData();
                 ImageView picture = findViewById(R.id.imgPicture);
                 Picasso.get().load(imageUri).into(picture);
+                selectedImageUri = imageUri;
             }
         }
     }
@@ -73,6 +81,7 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskRequ
      * @param view
      */
     public void onBtnRegisterClicked(View view) {
+        new UploadImage(this).execute(selectedImageUri);
         //TODO register user into the DB
     }
 
@@ -86,7 +95,33 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskRequ
     }
 
     @Override
-    public void receiveResponse(Object response) {
+    public void receiveAsyncResponse(Object response) {
         //TODO handle the response from the upload to cloudinary
+        EditText txtName = findViewById(R.id.txtName);
+        EditText txtEmail = findViewById(R.id.txtEmail);
+        EditText txtPassword = findViewById(R.id.txtPassword);
+
+        JSONObject data = new JSONObject();
+
+        try {
+            data.put("name", txtName.getText().toString());
+            data.put("email", txtEmail.getText().toString());
+            data.put("password", txtPassword.getText().toString());
+            data.put("profile_picture", response.toString());
+
+            APICalls.post("user", data, this);
+        } catch(Exception ex) {
+
+        }
+    }
+
+    @Override
+    public void receiveApiResponse(Object response) {
+        System.out.println(response);
+    }
+
+    @Override
+    public void receiveApiError(Object error) {
+
     }
 }

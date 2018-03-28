@@ -26,12 +26,20 @@
                 app:srcCompat="@color/cardview_shadow_start_color" />
 
             <EditText
+                android:id="@+id/txtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:ems="10"
+                android:inputType="textEmailAddress" />
+
+            <EditText
                 android:id="@+id/txtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textEmailAddress"
-                android:layout_marginTop="30dp"/>
+                android:layout_marginTop="10dp"/>
 
             <EditText
                 android:id="@+id/txtPassword"
