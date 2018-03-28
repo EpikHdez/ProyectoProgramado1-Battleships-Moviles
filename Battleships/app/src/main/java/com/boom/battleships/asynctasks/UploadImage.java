@@ -1,4 +1,4 @@
-package com.boom.battleships.aync.task;
+package com.boom.battleships.asynctasks;
 
 import android.net.Uri;
 import android.os.AsyncTask;
