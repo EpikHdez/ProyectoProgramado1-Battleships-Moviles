@@ -18,6 +18,7 @@
     <string name="btnCancel">Cancelar</string>
     <string name="btnRegister">Registrarse</string>
     <string name="lblRecoverPassword"><u>Recuperar contraseña</u></string>
+    <string name="selectImage">Seleccionar imagen</string>
     <!-- Strings related to register activity -->
 
 </resources>

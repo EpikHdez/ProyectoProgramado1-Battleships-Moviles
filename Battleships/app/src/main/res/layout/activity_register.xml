@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.boom.battleships.RegisterActivity">
+    tools:context="com.boom.battleships.views.RegisterActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,12 +17,21 @@
             android:orientation="vertical"
             android:layout_centerVertical="true">
 
+            <ImageView
+                android:id="@+id/imgPicture"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal"
+                android:onClick="onImgPictureClicked"
+                app:srcCompat="@color/cardview_shadow_start_color" />
+
             <EditText
                 android:id="@+id/txtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:layout_marginTop="30dp"/>
 
             <EditText
                 android:id="@+id/txtPassword"
