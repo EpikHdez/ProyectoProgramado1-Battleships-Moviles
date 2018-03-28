@@ -117,11 +117,12 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskRequ
 
     @Override
     public void receiveApiResponse(Object response) {
+        //TODO delete this and write actual code
         System.out.println(response);
     }
 
     @Override
     public void receiveApiError(Object error) {
-
+        //TODO handle api error
     }
 }
