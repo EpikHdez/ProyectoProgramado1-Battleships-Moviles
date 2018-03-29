@@ -8,5 +8,5 @@ public class Element {
     private int id;
     private String image;
     private String name;
-    private int price; 
+    private int price;
 }
