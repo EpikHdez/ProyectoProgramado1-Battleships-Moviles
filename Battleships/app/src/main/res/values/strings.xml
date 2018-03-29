@@ -14,12 +14,13 @@
     <string name="onFacebookLoginCancelled">Se ha cancelado el inicio de sesión, debe iniciar sesión
         para poder continuar.</string>
     <!-- Strings related to login activity -->
-    
+
     <!-- Strings related to register activity -->
     <string name="btnCancel">Cancelar</string>
     <string name="btnRegister">Registrarse</string>
     <string name="lblRecoverPassword"><u>Recuperar contraseña</u></string>
     <string name="selectImage">Seleccionar imagen</string>
+    <string name="title_activity_board">BoardActivity</string>
     <!-- Strings related to register activity -->
 
 </resources>

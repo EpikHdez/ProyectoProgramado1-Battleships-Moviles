@@ -26,8 +26,7 @@
 
         <meta-data
             android:name="CLOUDINARY_URL"
-            android:value="cloudinary://748595732486542:9otU3VDiftLsixb0BlFD2SLR0L4@epikhdez"/>
-
+            android:value="cloudinary://748595732486542:9otU3VDiftLsixb0BlFD2SLR0L4@epikhdez" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -49,8 +48,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".views.HomeActivity" />
-        <activity android:name=".views.RegisterActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".views.RegisterActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
