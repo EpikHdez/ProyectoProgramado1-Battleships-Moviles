@@ -1,6 +1,7 @@
 package com.boom.battleships.views;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,8 +22,31 @@ import java.util.List;
 
 public class BoardActivity extends AppCompatActivity {
     private ArrayList<Integer> board=new ArrayList<Integer>();
+    private int state=0;
 
 
+
+    public void onClickBoats(View view){
+        state=0;
+        Button button=findViewById(R.id.btnBoat);
+        button.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        Button button1=findViewById(R.id.btnBomb);
+        button1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        Button button2=findViewById(R.id.btnStore);
+        button2.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+    }
+
+    public void onClickBombs(View view){
+        state=1;
+        Button button=findViewById(R.id.btnBomb);
+        button.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        Button button1=findViewById(R.id.btnBoat);
+        button1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        Button button2=findViewById(R.id.btnStore);
+        button2.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+
+    }
     public ArrayList<ImageView> generateButtons(){
         ArrayList<ImageView> buttons=new ArrayList<ImageView>();
         for(int i=0;i<64;i++){
@@ -60,25 +84,44 @@ public class BoardActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ImageView currentPosition;
-                Log.d("Entre", String.valueOf(position));
-                str_availableBoats = (String) tv_availableBoats.getText();
-                if(board.get(position)==0  ){
-                    if(!str_availableBoats.equals("0")) {
-                        board.set(position, 1);
-                        currentPosition = (ImageView) gridAdapter.getItem(position);
-                        currentPosition.setImageResource(R.drawable.boat);
 
-                        availableBoats = Integer.parseInt(str_availableBoats) - 1;
+                ImageView imageView = (ImageView) view;
+                imageView.setImageResource(ImageAdapter.mThumbSelected[position]);
+                str_availableBoats = (String) tv_availableBoats.getText();
+
+
+                if(state==0) {
+                    if (board.get(position) == 0) {
+                        if (!str_availableBoats.equals("0")) {
+                            board.set(position, 1);
+
+                            gridAdapter.changeImage(position,R.drawable.boat);
+
+                            availableBoats = Integer.parseInt(str_availableBoats) - 1;
+                            tv_availableBoats.setText(String.valueOf(availableBoats));
+                        }
+                    } else {
+                        board.set(position, 0);
+                        gridAdapter.changeImage(position,R.drawable.wave);
+                        availableBoats = Integer.parseInt(str_availableBoats) + 1;
                         tv_availableBoats.setText(String.valueOf(availableBoats));
                     }
                 }else{
-                    board.set(position,0);
-                    currentPosition=(ImageView)gridAdapter.getItem(position);
-                    currentPosition.setImageResource(R.drawable.wave);
+                    if (board.get(position) != 2) {
+                        if (!str_availableBoats.equals("0")) {
+                            board.set(position, 2);
+                            gridAdapter.changeImage(position,R.drawable.boom);
 
-                    availableBoats= Integer.parseInt(str_availableBoats)+1;
-                    tv_availableBoats.setText(String.valueOf(availableBoats));
+
+
+                        }
+                    } else {
+                        board.set(position, 0);
+                        gridAdapter.changeImage(position,R.drawable.wave);
+
+
+                    }
+
                 }
 
             }

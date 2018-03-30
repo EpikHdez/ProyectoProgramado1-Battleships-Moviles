@@ -28,7 +28,9 @@ public class GridViewAdapter extends BaseAdapter {
         this.imageViews = imageViews;
 
     }
-
+    public void changeImage(int position, int image){
+        imageViews.get(position).setImageResource(image);
+    }
 
     public View getView(int position, View convertView, ViewGroup parent) {
         final ImageView image= imageViews.get(position);
@@ -48,9 +50,11 @@ public class GridViewAdapter extends BaseAdapter {
 
 
         }
+
         final ImageView imageView = (ImageView)convertView.findViewById(R.id.image);
 
         imageView.setImageResource(R.drawable.wave);
+
         imageViews.set(position,imageView);
 
         Log.d("position", String.valueOf(position));
@@ -73,7 +77,7 @@ public class GridViewAdapter extends BaseAdapter {
     @Override
 
     public Object getItem(int position) {
-
+        Log.d("Posicion desde aqui", String.valueOf(position));
         return imageViews.get(position);
 
     }

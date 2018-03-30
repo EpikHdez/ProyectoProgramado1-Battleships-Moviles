@@ -126,11 +126,12 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/btnBoat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary" />
+                android:background="@color/colorPrimary"
+                android:onClick="onClickBoats"/>
 
             <Space
                 android:layout_width="wrap_content"
@@ -138,11 +139,12 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/btnBomb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary" />
+                android:background="@color/colorPrimary"
+                android:onClick="onClickBombs"/>
 
             <Space
                 android:layout_width="wrap_content"
@@ -150,11 +152,12 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/btnStore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary" />
+                android:background="@color/colorPrimary"
+              />
 
             <Space
                 android:layout_width="wrap_content"
