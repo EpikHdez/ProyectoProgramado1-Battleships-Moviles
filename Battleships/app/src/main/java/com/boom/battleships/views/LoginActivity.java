@@ -7,7 +7,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.boom.battleships.R;
+import com.boom.battleships.asynctasks.APICalls;
+import com.boom.battleships.interfaces.ApiCallRequester;
+import com.boom.battleships.interfaces.AsyncTaskRequester;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -15,20 +19,38 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.List;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity  implements AsyncTaskRequester, ApiCallRequester {
     //Facebook needed variables
     private CallbackManager cbManager;
     private LoginButton loginButton;
 
+    public void getFriends(){
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/{friend-list-id}",
+                null,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                            Log.d("friends",response.toString());
+            /* handle the result */
+                    }
+                }
+        ).executeAsync();
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         cbManager = CallbackManager.Factory.create();
         loginButton = findViewById(R.id.login_button);
 
-        final List<String> readPermissions = Arrays.asList("public_profile", "email", "user_friends");
+        final List<String> readPermissions = Arrays.asList("public_profile", "email","user_friends");
         loginButton.setReadPermissions(readPermissions);
 
         // Callback registration
@@ -71,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 if(loginResult.getAccessToken() != null) {
+                    getFriends();
                     GraphRequest request = GraphRequest.newMeRequest(
                             loginResult.getAccessToken(),
                             new GraphRequest.GraphJSONObjectCallback() {
@@ -84,12 +107,28 @@ public class LoginActivity extends AppCompatActivity {
                                         String email = object.getString("email"); // 01/31/1980 format
                                         Log.d("Permisos",public_profile);
                                         Log.d("Permisos",email);*/
-                                        System.out.println(object);
+                                        Log.d("FacebookResponse:",object.toString());
+                                    JSONObject data = new JSONObject();
+
+                                    try {
+                                        data.put("name", data.get("name"));
+                                        data.put("email", data.get("email"));
+                                        JSONObject picture= (JSONObject) data.get("picture");
+                                        JSONObject pictureData= (JSONObject) picture.get("data");
+
+                                        data.put("profile_picture",  pictureData.get("url"));
+
+                                        APICalls.post("user", data, (ApiCallRequester) getApplicationContext());
+                                    } catch(Exception ex) {
+
+                                    }
+
 
                                 }
                             });
                     Bundle parameters = new Bundle();
-                    parameters.putString("fields", "id,name,email,gender,birthday, user_friends");
+                    parameters.putString("fields", "id,name,email,gender,birthday, picture,friends");
+
                     request.setParameters(parameters);
                     request.executeAsync();
 
@@ -152,5 +191,20 @@ public class LoginActivity extends AppCompatActivity {
     public void onBtnRegisterWithEmailClicked(View view) {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void receiveApiResponse(Object response) {
+
+    }
+
+    @Override
+    public void receiveApiError(Object error) {
+
+    }
+
+    @Override
+    public void receiveAsyncResponse(Object response) {
+
     }
 }
