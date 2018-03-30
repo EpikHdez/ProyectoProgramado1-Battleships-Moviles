@@ -13,8 +13,13 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -58,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         cbManager = CallbackManager.Factory.create();
         loginButton = findViewById(R.id.login_button);
 
-        List<String> readPermissions = Arrays.asList("public_profile", "email");
+        final List<String> readPermissions = Arrays.asList("public_profile", "email", "user_friends");
         loginButton.setReadPermissions(readPermissions);
 
         // Callback registration
@@ -66,6 +71,28 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 if(loginResult.getAccessToken() != null) {
+                    GraphRequest request = GraphRequest.newMeRequest(
+                            loginResult.getAccessToken(),
+                            new GraphRequest.GraphJSONObjectCallback() {
+                                @Override
+                                public void onCompleted(JSONObject object, GraphResponse response) {
+                                    Log.v("LoginActivity", response.toString());
+
+                                    // Application code
+
+                                        /*String public_profile = object.getString("public_profile");
+                                        String email = object.getString("email"); // 01/31/1980 format
+                                        Log.d("Permisos",public_profile);
+                                        Log.d("Permisos",email);*/
+                                        System.out.println(object);
+
+                                }
+                            });
+                    Bundle parameters = new Bundle();
+                    parameters.putString("fields", "id,name,email,gender,birthday, user_friends");
+                    request.setParameters(parameters);
+                    request.executeAsync();
+
                     openHomeActivity();
                 }
             }

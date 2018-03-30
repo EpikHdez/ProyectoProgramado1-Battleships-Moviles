@@ -85,7 +85,7 @@ public class BoardActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                
+
                 str_availableBoats = (String) tv_availableBoats.getText();
 
 
