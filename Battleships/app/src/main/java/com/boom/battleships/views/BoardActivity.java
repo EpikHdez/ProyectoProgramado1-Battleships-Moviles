@@ -85,8 +85,7 @@ public class BoardActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                ImageView imageView = (ImageView) view;
-                imageView.setImageResource(ImageAdapter.mThumbSelected[position]);
+                
                 str_availableBoats = (String) tv_availableBoats.getText();
 
 
