@@ -7,10 +7,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.boom.battleships.R;
 import com.boom.battleships.asynctasks.APICalls;
-import com.boom.battleships.interfaces.ApiCallRequester;
+import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -23,15 +23,12 @@ import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.List;
 
-public class LoginActivity extends AppCompatActivity  implements AsyncTaskRequester, ApiCallRequester {
+public class LoginActivity extends AppCompatActivity  implements AsyncTaskRequester, ApiCaller {
     //Facebook needed variables
     private CallbackManager cbManager;
     private LoginButton loginButton;
@@ -118,7 +115,7 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
 
                                         data.put("profile_picture",  pictureData.get("url"));
 
-                                        APICalls.post("user", data, (ApiCallRequester) getApplicationContext());
+                                        APICalls.post("user", data, (ApiCaller) getApplicationContext());
                                     } catch(Exception ex) {
 
                                     }
@@ -194,12 +191,12 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
     }
 
     @Override
-    public void receiveApiResponse(Object response) {
+    public void receiveApiResponse(JSONObject response) {
 
     }
 
     @Override
-    public void receiveApiError(Object error) {
+    public void receiveApiError(VolleyError error) {
 
     }
 

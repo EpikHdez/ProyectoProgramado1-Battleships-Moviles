@@ -1,33 +1,28 @@
 package com.boom.battleships.views;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.media.ExifInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.android.volley.VolleyError;
 import com.boom.battleships.R;
 import com.boom.battleships.asynctasks.APICalls;
 import com.boom.battleships.asynctasks.UploadImage;
-import com.boom.battleships.interfaces.ApiCallRequester;
+import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Iterator;
 
-public class RegisterActivity extends AppCompatActivity implements AsyncTaskRequester, ApiCallRequester {
+public class RegisterActivity extends AppCompatActivity implements AsyncTaskRequester, ApiCaller {
     private Uri selectedImageUri;
 
     @Override
@@ -81,7 +76,10 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskRequ
      * @param view
      */
     public void onBtnRegisterClicked(View view) {
-        new UploadImage(this).execute(selectedImageUri);
+        if(selectedImageUri != null)
+            new UploadImage(this).execute(selectedImageUri);
+        else
+            registerUser(null);
         //TODO register user into the DB
     }
 
@@ -97,6 +95,10 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskRequ
     @Override
     public void receiveAsyncResponse(Object response) {
         //TODO handle the response from the upload to cloudinary
+        registerUser(response.toString());
+    }
+
+    private void registerUser(String pictureURL) {
         EditText txtName = findViewById(R.id.txtName);
         EditText txtEmail = findViewById(R.id.txtEmail);
         EditText txtPassword = findViewById(R.id.txtPassword);
@@ -107,22 +109,32 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskRequ
             data.put("name", txtName.getText().toString());
             data.put("email", txtEmail.getText().toString());
             data.put("password", txtPassword.getText().toString());
-            data.put("profile_picture", response.toString());
 
-            APICalls.post("user", data, this);
+            if(pictureURL != null)
+                data.put("profile_picture", pictureURL);
+
+            APICalls.post("auth/signup", data, this);
         } catch(Exception ex) {
 
         }
     }
 
     @Override
-    public void receiveApiResponse(Object response) {
+    public void receiveApiResponse(JSONObject response) {
         //TODO delete this and write actual code
-        System.out.println(response);
+        Log.i("APIResponse", "receiveApiResponse: " + response);
     }
 
     @Override
-    public void receiveApiError(Object error) {
+    public void receiveApiError(VolleyError error) {
         //TODO handle api error
+        try {
+            String message = new String(error.networkResponse.data, "UTF-8");
+            JSONObject errorJson = new JSONObject(message);
+
+            Log.i("APIError", "receiveApiError: " + message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
