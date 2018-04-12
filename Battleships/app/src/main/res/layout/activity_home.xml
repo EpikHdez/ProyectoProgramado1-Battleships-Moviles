@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
-    tools:context="com.boom.battleships.views.HomeActivity">
+    tools:context="com.boom.battleships.views.HomeActivity"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,10 +27,10 @@
             <Button
                 android:id="@+id/button5"
                 android:layout_width="25dp"
-                android:layout_height="55dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/profile" />
+                android:background="@drawable/chat" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -39,10 +40,10 @@
             <Button
                 android:id="@+id/button6"
                 android:layout_width="25dp"
-                android:layout_height="55dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/profile" />
+                android:background="@drawable/store" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -52,10 +53,10 @@
             <Button
                 android:id="@+id/button7"
                 android:layout_width="25dp"
-                android:layout_height="55dp"
+                android:layout_height="65dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/profile" />
+                android:background="@drawable/top" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -65,10 +66,10 @@
             <Button
                 android:id="@+id/button8"
                 android:layout_width="25dp"
-                android:layout_height="55dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/profile" />
+                android:background="@drawable/help" />
 
             <Space
                 android:layout_width="wrap_content"

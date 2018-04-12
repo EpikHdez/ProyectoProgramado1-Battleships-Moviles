@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccentDark"
-    tools:context="com.boom.battleships.views.BoardActivity">
+    tools:context="com.boom.battleships.views.BoardActivity"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -102,16 +103,26 @@
                     android:text="0"
                     android:textColor="@color/colorAccentLight"
                     android:textSize="20sp" />
+
+
             </LinearLayout>
 
-            <GridView
+            <!---<GridView
                 android:id="@+id/gridView"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center_vertical|center_horizontal"
-                android:numColumns="8" />
+                android:numColumns="8" /> -->
+            <GridLayout
+                android:id="@+id/boardGame"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            </GridLayout>
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -130,8 +141,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary"
-                android:onClick="onClickBoats"/>
+                android:background="@color/colorPrimaryDark"
+                android:onClick="onClickBoats"
+                android:text="Barcos"
+                android:textColor="@color/cardview_light_background" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -144,7 +157,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                android:onClick="onClickBombs"/>
+                android:onClick="onClickBombs"
+                android:text="Bombas"
+                android:textColor="@color/cardview_light_background" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -157,7 +172,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-              />
+                android:text="Enviar"
+                android:textColor="@color/cardview_light_background" />
 
             <Space
                 android:layout_width="wrap_content"

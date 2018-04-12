@@ -1,10 +1,18 @@
 package com.boom.battleships.views;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -12,6 +20,7 @@ import com.boom.battleships.R;
 import com.boom.battleships.asynctasks.APICalls;
 import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
+import com.boom.battleships.model.User;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -22,9 +31,11 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,7 +43,8 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
     //Facebook needed variables
     private CallbackManager cbManager;
     private LoginButton loginButton;
-
+    private JSONObject facebookParameters;
+    private String pass;
     public void getFriends(){
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
@@ -72,6 +84,7 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         cbManager.onActivityResult(requestCode, resultCode, data);
+
     }
 
     /**
@@ -100,23 +113,37 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
 
                                     // Application code
 
-                                        /*String public_profile = object.getString("public_profile");
-                                        String email = object.getString("email"); // 01/31/1980 format
-                                        Log.d("Permisos",public_profile);
-                                        Log.d("Permisos",email);*/
+
                                         Log.d("FacebookResponse:",object.toString());
                                     JSONObject data = new JSONObject();
 
                                     try {
-                                        data.put("name", data.get("name"));
-                                        data.put("email", data.get("email"));
-                                        JSONObject picture= (JSONObject) data.get("picture");
+
+                                        User user= User.getInstance();
+                                        Log.d("Name", (String) object.get("name"));
+                                        data.put("name", object.get("name"));
+                                        data.put("email", object.get("email"));
+                                        JSONObject picture= (JSONObject) object.get("picture");
                                         JSONObject pictureData= (JSONObject) picture.get("data");
 
                                         data.put("profile_picture",  pictureData.get("url"));
+                                        Log.d("Picture", (String) data.get("profile_picture"));
+                                        user.setName((String) object.get("name"));
+                                        user.setEmail((String) object.get("email"));
+                                        user.setPicture((String) pictureData.get("url"));
 
-                                        APICalls.post("user", data, (ApiCaller) getApplicationContext());
+
+                                        requestPassword();
+                                        Log.d("Password",pass);
+                                        data.put("password",pass);
+                                        facebookParameters=data;
+
+                                        Log.d("FacebookParameters",facebookParameters.toString());
+
+
+
                                     } catch(Exception ex) {
+                                        Log.d("Exception", ex.toString());
 
                                     }
 
@@ -128,8 +155,15 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
 
                     request.setParameters(parameters);
                     request.executeAsync();
+                    //APICalls.post("auth/signup", data, this);
+                    User user= User.getInstance();
+                    Log.d("Usuario",user.toString());
+                    //
 
-                    openHomeActivity();
+
+                    //
+
+
                 }
             }
 
@@ -167,6 +201,40 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
 
         //Uncomment to finish this activity and avoid going back here when the back button is pressed.
         //finish();
+    }
+    private void requestPassword(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Ingrese una Contraseña");
+        final EditText input = new EditText(this);
+
+        input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        input.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        builder.setView(input);
+
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            String m_Text = "";
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                m_Text = input.getText().toString();
+                pass=m_Text;
+                Log.d("m_Text",pass);
+
+                //openHomeActivity();
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
+
     }
 
     /**
