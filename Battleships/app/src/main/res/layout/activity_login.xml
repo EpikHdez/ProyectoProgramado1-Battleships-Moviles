@@ -10,20 +10,57 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/back2">
+        android:background="@drawable/back2"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="200sp"
-                android:layout_gravity="center_horizontal"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
                 app:srcCompat="@drawable/profile4" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Correo"
+                android:textColor="@color/cardview_light_background"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:textColor="@color/cardview_light_background" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Contraseña"
+                android:textColor="@color/cardview_light_background"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/editText3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:textColor="@color/cardview_light_background" />
 
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/login_button"
@@ -31,15 +68,24 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="10dp"
                 android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btnlogin"
+                android:layout_width="200dp"
+                android:layout_height="28dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorAccent"
+                android:text="Iniciar Sesión"
+                android:textColor="@color/cardview_light_background" />
 
             <Button
                 android:id="@+id/btnRegisterWIthEmail"
                 android:layout_width="200dp"
                 android:layout_height="28dp"
                 android:layout_gravity="center_horizontal"
-                android:background="@color/colorAccentDark"
+                android:background="@color/colorAccent"
                 android:onClick="onBtnRegisterWithEmailClicked"
                 android:text="@string/btnRegisterWithEmail"
                 android:textColor="@color/colorAccentLight" />

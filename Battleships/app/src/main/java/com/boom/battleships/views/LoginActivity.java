@@ -1,7 +1,10 @@
 package com.boom.battleships.views;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Picture;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
@@ -33,18 +36,27 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity  implements AsyncTaskRequester, ApiCaller {
     //Facebook needed variables
     private CallbackManager cbManager;
     private LoginButton loginButton;
     private JSONObject facebookParameters;
-    private String pass;
+    private ApiCaller caller;
+    SharedPreferences sharedpreferences;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String Name = "nameKey";
+    public static final String Pass = "passKey";
+    public static final String Picture = "pictureKey";
+    public static final String Email = "emailKey";
+
     public void getFriends(){
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
@@ -64,13 +76,35 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        caller= this;
         FacebookSdk.sdkInitialize(getApplicationContext());
         setUpFacebookLoginButton();
 
         if(isLoggedIn()) {
-            openHomeActivity();
+
+
+            sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+            Map<String,?> keys = sharedpreferences.getAll();
+
+            for(Map.Entry<String,?> entry : keys.entrySet()){
+                Log.d("map values",entry.getKey() + ": " + entry.getValue().toString());
+            }
+            JSONObject data = new JSONObject();
+            try {
+                User user=User.getInstance();
+                user.setEmail(sharedpreferences.getString(Email, ""));
+
+                data.put("email",sharedpreferences.getString(Email, ""));
+                data.put("password",sharedpreferences.getString(Pass, ""));
+                APICalls.post("auth/login",data,caller);
+                openHomeActivity();
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
     /**
@@ -126,19 +160,18 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
                                         JSONObject picture= (JSONObject) object.get("picture");
                                         JSONObject pictureData= (JSONObject) picture.get("data");
 
-                                        data.put("profile_picture",  pictureData.get("url"));
-                                        Log.d("Picture", (String) data.get("profile_picture"));
+                                        data.put("picture",  pictureData.get("url"));
+                                        Log.d("Picture", (String) data.get("picture"));
                                         user.setName((String) object.get("name"));
                                         user.setEmail((String) object.get("email"));
                                         user.setPicture((String) pictureData.get("url"));
-
-
-                                        requestPassword();
-                                        Log.d("Password",pass);
-                                        data.put("password",pass);
                                         facebookParameters=data;
 
                                         Log.d("FacebookParameters",facebookParameters.toString());
+
+                                        requestPassword(facebookParameters);
+
+
 
 
 
@@ -155,9 +188,8 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
 
                     request.setParameters(parameters);
                     request.executeAsync();
-                    //APICalls.post("auth/signup", data, this);
-                    User user= User.getInstance();
-                    Log.d("Usuario",user.toString());
+                    //
+
                     //
 
 
@@ -202,7 +234,7 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
         //Uncomment to finish this activity and avoid going back here when the back button is pressed.
         //finish();
     }
-    private void requestPassword(){
+    private void requestPassword(final JSONObject data){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Ingrese una Contraseña");
@@ -218,10 +250,31 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 m_Text = input.getText().toString();
-                pass=m_Text;
-                Log.d("m_Text",pass);
 
-                //openHomeActivity();
+
+
+
+
+                try {
+                    data.put("password",m_Text);
+                    APICalls.post("auth/signup", data, caller);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                try {
+                    editor.putString(Name, (String) data.get("name"));
+                    editor.putString(Pass, (String) data.get("password"));
+                    editor.putString(Email, (String) data.get("email"));
+                    editor.putString(Picture, (String) data.get("picture"));
+                    editor.commit();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+                openHomeActivity();
 
             }
         });
@@ -260,6 +313,18 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
 
     @Override
     public void receiveApiResponse(JSONObject response) {
+        Log.d("Response", response.toString());
+        try {
+            JSONObject jsonUser= (JSONObject) response.get("user");
+            User user=User.getInstance();
+            user.setId((Integer) jsonUser.get("id"));
+            user.setName((String) jsonUser.get("name"));
+            user.setPicture((String) jsonUser.get("picture"));
+            user.setMoney((Integer)jsonUser.get("money"));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 

@@ -2,6 +2,8 @@ package com.boom.battleships.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.boom.battleships.R;
+import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -31,6 +37,8 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
     private class ViewHolder {
         ImageView imageView;
         TextView txtName;
+        TextView txtTurn;
+        TextView txtMatch;
 
     }
 
@@ -46,14 +54,19 @@ public class CustomListViewAdapter extends ArrayAdapter<RowItem> {
             holder = new ViewHolder();
             holder.txtName = (TextView) convertView.findViewById(R.id.txtName);
             holder.imageView = (ImageView) convertView.findViewById(R.id.icon);
+            holder.txtTurn=(TextView) convertView.findViewById(R.id.txtTurn);
+            holder.txtMatch=(TextView) convertView.findViewById(R.id.idmatch);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
 
 
         holder.txtName.setText(rowItem.getName());
-        holder.imageView.setImageResource(rowItem.getImageId());
+        Picasso.get().load(rowItem.getImageId()).into(holder.imageView);
+        String matchS= String.valueOf(rowItem.getMatch());
+        holder.txtMatch.setText(matchS);
 
+        holder.txtTurn.setText(rowItem.getTurn());
         return convertView;
     }
 

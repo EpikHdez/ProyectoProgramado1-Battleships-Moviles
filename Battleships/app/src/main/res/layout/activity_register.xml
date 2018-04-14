@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.boom.battleships.views.RegisterActivity"
-    >
+    android:background="@color/colorAccent"
+    tools:context="com.boom.battleships.views.RegisterActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,8 +15,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_centerVertical="true">
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/imgPicture"
@@ -32,45 +32,58 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:ems="10"
-                android:inputType="textEmailAddress" />
+                android:hint="Nombre"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/cardview_light_background" />
 
             <EditText
                 android:id="@+id/txtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:ems="10"
+                android:hint="Correo"
                 android:inputType="textEmailAddress"
-                android:layout_marginTop="10dp"/>
+                android:textColor="@color/cardview_light_background" />
 
             <EditText
                 android:id="@+id/txtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:ems="10"
+                android:hint="Contraseña"
                 android:inputType="textPassword"
-                android:layout_marginTop="10dp"/>
+                android:textColor="@color/cardview_light_background" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btnCancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/btnCancel"
-                    android:onClick="onBtnCancelClicked"/>
+                    android:background="@color/colorPrimary"
+                    android:onClick="onBtnCancelClicked"
+                    android:text="@string/btnCancel" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
                 <Button
                     android:id="@+id/btnRegister"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/btnRegister"
-                    android:onClick="onBtnRegisterClicked"/>
+                    android:background="@color/colorPrimary"
+                    android:onClick="onBtnRegisterClicked"
+                    android:text="@string/btnRegister" />
             </LinearLayout>
 
             <TextView
@@ -79,11 +92,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
+                android:onClick="onLblRecoverPasswordClicked"
                 android:text="@string/lblRecoverPassword"
                 android:textAlignment="center"
-                android:textSize="18sp"
-                android:onClick="onLblRecoverPasswordClicked"
-                android:textColor="@color/colorLink"/>
+                android:textColor="@color/colorLink"
+                android:textSize="18sp" />
         </LinearLayout>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

@@ -20,17 +20,81 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.boom.battleships.R;
+import com.boom.battleships.asynctasks.APICalls;
+import com.boom.battleships.interfaces.ApiCaller;
+import com.boom.battleships.interfaces.AsyncTaskRequester;
+import com.boom.battleships.model.User;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardActivity extends AppCompatActivity {
+public class BoardActivity extends AppCompatActivity implements AsyncTaskRequester, ApiCaller {
     private ArrayList<Integer> board=new ArrayList<Integer>();
     private int state=0;
     private int numbomb=1;
+    private User user;
+    private ApiCaller caller;
+    private int flag;
+    private boolean iniciada=false;
+
+    public void sendBoard(View view){
+        flag=1;
+        createBoard();
+
+        APICalls.get("user/match/"+String.valueOf(user.getCurrentGame()),caller);
 
 
+    }
+    public void createBoard(){
+        JSONObject jsonObject=new JSONObject();
+        JSONObject boardJSON=new JSONObject();
+        JSONObject boardJSONRival=new JSONObject();
+        for(int i=0; i<board.size();i++){
+            try {
+                boardJSON.put(String.valueOf(i),board.get(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if(iniciada==false){
+
+
+            for(int i=0; i<board.size();i++){
+                try {
+                    boardJSONRival.put(String.valueOf(i),0);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        JSONArray boards=new JSONArray();
+        TextView tv_destroyedBoats= findViewById(R.id.txtNumDestroy);
+        TextView tv_points= findViewById(R.id.txtNumPoints);
+
+
+        String str_destroyedBoats= (String) tv_destroyedBoats.getText();
+        String str_points= (String) tv_points.getText();
+
+        try {
+            boards.put( boardJSON);
+            boards.put(boardJSONRival);
+            JSONObject objBoards=new JSONObject();
+            objBoards.put("boards",boards);
+            jsonObject.put("board",objBoards);
+            jsonObject.put("destroyed_ships",Integer.parseInt(str_destroyedBoats));
+            jsonObject.put("score",Integer.parseInt(str_points));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        APICalls.put("user/match/"+String.valueOf(user.getCurrentGame()),jsonObject,caller);
+
+    }
 
     public void onClickBoats(View view){
         state=0;
@@ -108,10 +172,26 @@ public class BoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
+        user= User.getInstance();
+        caller=this;
+        Log.d("CurrentGame", String.valueOf(user.getCurrentGame()));
+        APICalls.get("user/match/"+String.valueOf(user.getCurrentGame()),caller);
 
 
 
 
+
+
+
+
+
+
+    }
+    public void loadBoard(){
+
+    }
+
+    public void initBoard(){
 
         TextView tv_availableBoats= findViewById(R.id.txtNumBoats);
         TextView tv_destroyedBoats= findViewById(R.id.txtNumDestroy);
@@ -145,9 +225,44 @@ public class BoardActivity extends AppCompatActivity {
 
         }
 
+    }
+    @Override
+    public void receiveApiResponse(JSONObject response) {
+        Log.d("BoardMatch",response.toString());
+        switch (flag){
+            case 0:
+                try {
+
+                    JSONObject game=response.getJSONObject("game");
+
+                    if(game.isNull("board")){
+                        Log.d("Partida","No se ha iniciado la partida");
+                        initBoard();
+                    }else{
+                        iniciada=true;
+                        loadBoard();
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case 1:
+
+                break;
+        }
 
 
 
+    }
+
+    @Override
+    public void receiveApiError(VolleyError error) {
+
+    }
+
+    @Override
+    public void receiveAsyncResponse(Object response) {
 
     }
 }

@@ -5,15 +5,17 @@ package com.boom.battleships.views;
  */
 
 public class RowItem {
-    private int imageId;
+    private String imageId;
+    private int match;
     private String name;
+    private String turn;
 
 
-    public int getImageId() {
+    public String getImageId() {
         return imageId;
     }
 
-    public void setImageId(int imageId) {
+    public void setImageId(String imageId) {
         this.imageId = imageId;
     }
 
@@ -21,13 +23,32 @@ public class RowItem {
         return name;
     }
 
+    public String getTurn() {
+        return turn;
+    }
+
+    public void setTurn(String turn) {
+        this.turn = turn;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public RowItem(int imageId, String name) {
+    public int getMatch() {
+        return match;
+    }
+
+    public void setMatch(int match) {
+        this.match = match;
+    }
+
+    public RowItem(String imageId, String name, String turn, int match) {
         this.imageId = imageId;
         this.name = name;
+
+        this.turn = turn;
+        this.match= match;
 
 
     }

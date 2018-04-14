@@ -12,6 +12,24 @@ public class User {
     private String name;
     private String picture;
     private String email;
+    private int money;
+    private int currentGame;
+
+    public int getCurrentGame() {
+        return currentGame;
+    }
+
+    public void setCurrentGame(int currentGame) {
+        this.currentGame = currentGame;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
 
     public String getEmail() {
         return email;
