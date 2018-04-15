@@ -39,7 +39,7 @@ public class User {
         this.email = email;
     }
 
-    private ArrayList<Integer> friends;
+    private ArrayList<Friend> friends;
     private ArrayList<Game> games;
     private ArrayList<Game> finishedGames;
     private ArrayList<Element> elements;
@@ -54,11 +54,6 @@ public class User {
         finishedGames=new ArrayList<>();
         elements=new ArrayList<>();
 
-    }
-
-
-    public static User getOurInstance() {
-        return ourInstance;
     }
 
     public int getId() {
@@ -85,11 +80,11 @@ public class User {
         this.picture = picture;
     }
 
-    public ArrayList<Integer> getFriends() {
+    public ArrayList<Friend> getFriends() {
         return friends;
     }
 
-    public void setFriends(ArrayList<Integer> friends) {
+    public void setFriends(ArrayList<Friend> friends) {
         this.friends = friends;
     }
 

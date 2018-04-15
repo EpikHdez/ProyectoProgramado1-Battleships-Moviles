@@ -7,22 +7,28 @@
     android:background="@color/colorAccent"
     tools:context="com.boom.battleships.views.ChatsActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Conversaciones"
-            android:textColor="@color/colorAccentLight"
-            android:textSize="30sp" />
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="109dp"
+        tools:layout_editor_absoluteY="305dp">
 
         <ListView
             android:id="@+id/listChats"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/createChatFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="32dp"
+            android:src="@android:drawable/ic_input_add"
+            app:backgroundTint="@android:color/white" />
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
