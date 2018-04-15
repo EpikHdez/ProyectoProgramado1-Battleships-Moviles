@@ -30,6 +30,7 @@
                 app:srcCompat="@drawable/profile4" />
 
             <TextView
+                android:id="@+id/mail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Correo"
@@ -37,7 +38,7 @@
                 android:textSize="25sp" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/txtmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
@@ -46,7 +47,7 @@
                 android:textColor="@color/cardview_light_background" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/pass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Contraseña"
@@ -54,7 +55,7 @@
                 android:textSize="25sp" />
 
             <EditText
-                android:id="@+id/editText3"
+                android:id="@+id/txtpass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
@@ -77,6 +78,7 @@
                 android:layout_height="28dp"
                 android:layout_marginBottom="10dp"
                 android:background="@color/colorAccent"
+                android:onClick="loginNoFace"
                 android:text="Iniciar Sesión"
                 android:textColor="@color/cardview_light_background" />
 

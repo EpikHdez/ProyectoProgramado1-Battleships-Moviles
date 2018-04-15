@@ -66,6 +66,8 @@ public class MatchActivity extends AppCompatActivity implements AsyncTaskRequest
                     APICalls.post("user/match",rival,caller);
                     flag=1;
 
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

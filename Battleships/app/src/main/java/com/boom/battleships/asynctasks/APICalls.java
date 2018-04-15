@@ -27,7 +27,7 @@ public class APICalls {
     private static Map<String, String> headers;
 
     public static void init(Context context) {
-        BASE_URL = "http://192.168.0.111:3000/api/v1/";
+        BASE_URL = "https://boombattleships.herokuapp.com/api/v1/";
         headers = new HashMap<>();
 
         addHeader("Content-Type", "application/json");

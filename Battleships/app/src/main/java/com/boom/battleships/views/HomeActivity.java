@@ -74,6 +74,15 @@ public class HomeActivity extends AppCompatActivity implements AsyncTaskRequeste
 
 
     }
+    @Override
+    protected void onResume() {
+
+
+        super.onResume();
+        APICalls.get("user/matches", caller);
+
+
+    }
     public void showMatches(JSONObject response){
         ListView currentGamesView;
         ListView finishedGamesView;
@@ -94,6 +103,7 @@ public class HomeActivity extends AppCompatActivity implements AsyncTaskRequeste
                     item = new RowItem(picture,name, "Su turno.",id);
                 }else{
                     item = new RowItem(picture,name, "Espere su turno.",id);
+
                 }
 
                 rowItems.add(item);
@@ -105,11 +115,14 @@ public class HomeActivity extends AppCompatActivity implements AsyncTaskRequeste
             currentGamesView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    TextView txtturn = view.findViewById(R.id.txtTurn);
+                        if(txtturn.getText().equals("Su turno.")) {
+                            TextView txtmatch = view.findViewById(R.id.idmatch);
+                            Log.d("NumMatch", String.valueOf(txtmatch.getText()));
 
-                        TextView txtmatch=view.findViewById(R.id.idmatch);
-                        Log.d("NumMatch", String.valueOf(txtmatch.getText()));
-                        openBoardActivity();
-                        user.setCurrentGame(Integer.parseInt((String) txtmatch.getText()));
+                            user.setCurrentGame(Integer.parseInt((String) txtmatch.getText()));
+                            openBoardActivity();
+                        }
 
                 }
 
@@ -130,6 +143,8 @@ public class HomeActivity extends AppCompatActivity implements AsyncTaskRequeste
             case 0:
 
                 showMatches(response);
+                break;
+            case 1:
                 break;
         }
 

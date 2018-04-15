@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -25,6 +26,7 @@ import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
 import com.boom.battleships.model.User;
 import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -32,6 +34,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.squareup.picasso.Picasso;
@@ -56,6 +59,7 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
     public static final String Pass = "passKey";
     public static final String Picture = "pictureKey";
     public static final String Email = "emailKey";
+    private String passTemp;
 
     public void getFriends(){
         new GraphRequest(
@@ -72,6 +76,26 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
         ).executeAsync();
 
     }
+    public void loginNoFace(View view){
+        JSONObject data = new JSONObject();
+        try {
+            User user = User.getInstance();
+            user.setEmail(sharedpreferences.getString(Email, ""));
+            TextView txtemail=findViewById(R.id.txtmail);
+            TextView txtpass=findViewById(R.id.txtpass);
+            String email=  txtemail.getText().toString();
+            String pass= txtpass.getText().toString();
+            passTemp=pass;
+            data.put("email", email);
+            data.put("password", pass);
+            Log.d("email",email);
+            Log.d("pass",pass);
+            APICalls.post("auth/login", data, caller);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,11 +103,16 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
         caller= this;
         FacebookSdk.sdkInitialize(getApplicationContext());
         setUpFacebookLoginButton();
-
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         if(isLoggedIn()) {
+            findViewById(R.id.btnRegisterWIthEmail).setVisibility(View.INVISIBLE);
+            findViewById(R.id.btnlogin).setVisibility(View.INVISIBLE);
+            findViewById(R.id.txtmail).setVisibility(View.INVISIBLE);
+            findViewById(R.id.txtpass).setVisibility(View.INVISIBLE);
+            findViewById(R.id.mail).setVisibility(View.INVISIBLE);
+            findViewById(R.id.pass).setVisibility(View.INVISIBLE);
 
 
-            sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
             Map<String,?> keys = sharedpreferences.getAll();
 
             for(Map.Entry<String,?> entry : keys.entrySet()){
@@ -97,7 +126,6 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
                 data.put("email",sharedpreferences.getString(Email, ""));
                 data.put("password",sharedpreferences.getString(Pass, ""));
                 APICalls.post("auth/login",data,caller);
-                openHomeActivity();
 
 
             } catch (JSONException e) {
@@ -117,7 +145,9 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        cbManager.onActivityResult(requestCode, resultCode, data);
+
+            cbManager.onActivityResult(requestCode, resultCode, data);
+
 
     }
 
@@ -126,90 +156,112 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
      * application with its API.
      */
     private void setUpFacebookLoginButton() {
-        cbManager = CallbackManager.Factory.create();
-        loginButton = findViewById(R.id.login_button);
+        Profile fbProfile = Profile.getCurrentProfile();
+        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
 
-        final List<String> readPermissions = Arrays.asList("public_profile", "email","user_friends");
-        loginButton.setReadPermissions(readPermissions);
-
-        // Callback registration
-        loginButton.registerCallback(cbManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onSuccess(LoginResult loginResult) {
-                if(loginResult.getAccessToken() != null) {
-                    getFriends();
-                    GraphRequest request = GraphRequest.newMeRequest(
-                            loginResult.getAccessToken(),
-                            new GraphRequest.GraphJSONObjectCallback() {
-                                @Override
-                                public void onCompleted(JSONObject object, GraphResponse response) {
-                                    Log.v("LoginActivity", response.toString());
-
-                                    // Application code
-
-
-                                        Log.d("FacebookResponse:",object.toString());
-                                    JSONObject data = new JSONObject();
-
-                                    try {
-
-                                        User user= User.getInstance();
-                                        Log.d("Name", (String) object.get("name"));
-                                        data.put("name", object.get("name"));
-                                        data.put("email", object.get("email"));
-                                        JSONObject picture= (JSONObject) object.get("picture");
-                                        JSONObject pictureData= (JSONObject) picture.get("data");
-
-                                        data.put("picture",  pictureData.get("url"));
-                                        Log.d("Picture", (String) data.get("picture"));
-                                        user.setName((String) object.get("name"));
-                                        user.setEmail((String) object.get("email"));
-                                        user.setPicture((String) pictureData.get("url"));
-                                        facebookParameters=data;
-
-                                        Log.d("FacebookParameters",facebookParameters.toString());
-
-                                        requestPassword(facebookParameters);
-
-
-
-
-
-                                    } catch(Exception ex) {
-                                        Log.d("Exception", ex.toString());
-
-                                    }
-
-
-                                }
-                            });
-                    Bundle parameters = new Bundle();
-                    parameters.putString("fields", "id,name,email,gender,birthday, picture,friends");
-
-                    request.setParameters(parameters);
-                    request.executeAsync();
-                    //
-
-                    //
-
-
-                    //
-
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
+                                                       AccessToken currentAccessToken) {
+                if (currentAccessToken == null) {
+                    Log.d("holi", "onLogout catched");
+                    findViewById(R.id.btnRegisterWIthEmail).setVisibility(View.VISIBLE);
+                    findViewById(R.id.btnlogin).setVisibility(View.VISIBLE);
+                    findViewById(R.id.txtmail).setVisibility(View.VISIBLE);
+                    findViewById(R.id.txtpass).setVisibility(View.VISIBLE);
+                    findViewById(R.id.mail).setVisibility(View.VISIBLE);
+                    findViewById(R.id.pass).setVisibility(View.VISIBLE);
 
                 }
             }
+        };
+        if (fbProfile == null) {
+            cbManager = CallbackManager.Factory.create();
+            loginButton = findViewById(R.id.login_button);
 
-            @Override
-            public void onCancel() {
-                showToastMessage(R.string.onFacebookLoginCancelled, Toast.LENGTH_LONG);
-            }
+            final List<String> readPermissions = Arrays.asList("public_profile", "email", "user_friends");
+            loginButton.setReadPermissions(readPermissions);
 
-            @Override
-            public void onError(FacebookException exception) {
-                Log.d("FacebookException", String.format("onError: %s", exception.getMessage()));
-                showToastMessage(R.string.onFacebookLoginError, Toast.LENGTH_LONG);
-            }
-        });
+            // Callback registration
+            loginButton.registerCallback(cbManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    if (loginResult.getAccessToken() != null) {
+                        getFriends();
+                        GraphRequest request = GraphRequest.newMeRequest(
+                                loginResult.getAccessToken(),
+                                new GraphRequest.GraphJSONObjectCallback() {
+                                    @Override
+                                    public void onCompleted(JSONObject object, GraphResponse response) {
+                                        Log.v("LoginActivity", response.toString());
+
+                                        // Application code
+
+                                        Log.d("FacebookResponse:", object.toString());
+                                        JSONObject data = new JSONObject();
+
+                                        try {
+
+                                            User user = User.getInstance();
+                                            Log.d("Name", (String) object.get("name"));
+                                            data.put("name", object.get("name"));
+                                            data.put("email", object.get("email"));
+                                            JSONObject picture = (JSONObject) object.get("picture");
+                                            JSONObject pictureData = (JSONObject) picture.get("data");
+
+                                            data.put("picture", pictureData.get("url"));
+                                            Log.d("Picture", (String) data.get("picture"));
+                                            user.setName((String) object.get("name"));
+                                            user.setEmail((String) object.get("email"));
+                                            user.setPicture((String) pictureData.get("url"));
+                                            facebookParameters = data;
+
+                                            Log.d("FacebookParameters", facebookParameters.toString());
+
+                                            requestPassword(facebookParameters);
+                                            findViewById(R.id.btnRegisterWIthEmail).setVisibility(View.INVISIBLE);
+                                            findViewById(R.id.btnlogin).setVisibility(View.INVISIBLE);
+                                            findViewById(R.id.txtmail).setVisibility(View.INVISIBLE);
+                                            findViewById(R.id.txtpass).setVisibility(View.INVISIBLE);
+                                            findViewById(R.id.mail).setVisibility(View.INVISIBLE);
+                                            findViewById(R.id.pass).setVisibility(View.INVISIBLE);
+
+
+                                        } catch (Exception ex) {
+                                            Log.d("Exception", ex.toString());
+
+                                        }
+
+
+                                    }
+                                });
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id,name,email,gender,birthday, picture,friends");
+
+                        request.setParameters(parameters);
+                        request.executeAsync();
+                        //
+
+                        //
+
+
+                        //
+
+
+                    }
+                }
+
+                @Override
+                public void onCancel() {
+                    showToastMessage(R.string.onFacebookLoginCancelled, Toast.LENGTH_LONG);
+                }
+
+                @Override
+                public void onError(FacebookException exception) {
+                    Log.d("FacebookException", String.format("onError: %s", exception.getMessage()));
+                    showToastMessage(R.string.onFacebookLoginError, Toast.LENGTH_LONG);
+                }
+            });
+        }
     }
 
     /**
@@ -250,6 +302,7 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 m_Text = input.getText().toString();
+                passTemp=m_Text;
 
 
 
@@ -264,20 +317,26 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                SharedPreferences.Editor editor = sharedpreferences.edit();
+
 
                 try {
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putString(Name, (String) data.get("name"));
                     editor.putString(Pass, (String) data.get("password"));
                     editor.putString(Email, (String) data.get("email"));
                     editor.putString(Picture, (String) data.get("picture"));
                     editor.commit();
+                    JSONObject loginObj = new JSONObject();
+                    loginObj.put("email",data.get("email"));
+                    loginObj.put("password",data.get("password") );
+                    APICalls.post("auth/login", loginObj, caller);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
 
-                openHomeActivity();
+
 
             }
         });
@@ -324,7 +383,14 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
             user.setName((String) jsonUser.get("name"));
             user.setPicture((String) jsonUser.get("picture"));
             user.setMoney((Integer)jsonUser.get("money"));
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(Name, (String) jsonUser.get("name"));
+            editor.putString(Pass, passTemp);
+            editor.putString(Email, (String) jsonUser.get("email"));
+            editor.putString(Picture, (String) jsonUser.get("picture"));
+            editor.commit();
 
+            openHomeActivity();
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -2,8 +2,11 @@ package com.boom.battleships.views;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.Image;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,19 +45,106 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
     private ApiCaller caller;
     private int flag;
     private boolean iniciada=false;
+    private JSONObject rivalBoard;
+    private int destroy_ships;
 
     public void sendBoard(View view){
-        flag=1;
-        createBoard();
+        if(!iniciada) {
+            flag = 1;
+            createBoard();
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Alert");
+            alertDialog.setMessage("Se han posicionado sus botes.");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+        }else{
+            sendBomb();
 
-        APICalls.get("user/match/"+String.valueOf(user.getCurrentGame()),caller);
+
+        }
+        findViewById(R.id.btnSendBoard).setEnabled(false);
+
+
+
+    }
+    public void openHomeActivity() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    public void sendBomb(){
+        int index= board.indexOf(2);
+        try {
+            String sindex=String.valueOf(index);
+            Log.d("sindex",sindex);
+            int boat= rivalBoard.getInt(sindex);
+            final GridLayout boardGame= findViewById(R.id.boardGame);
+
+            View view= (View) boardGame.getChildAt(index);
+            ImageView imageView=view.findViewById(R.id.image);
+            TextView points=findViewById(R.id.txtNumPoints);
+
+            String pointsS= (String) points.getText();
+
+            int pointsI= Integer.parseInt(pointsS);
+
+
+
+            if(boat==1){
+
+               imageView.setImageResource(R.drawable.win);
+               rivalBoard.put(sindex,4);
+               pointsI+=100;
+               destroy_ships+=1;
+                AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+                alertDialog.setTitle(":)");
+                alertDialog.setMessage("Le ha dado a un barco.");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+
+                                openHomeActivity(); // Call once you redirect to another activity
+                            }
+                        });
+                alertDialog.show();
+
+            }else{
+                AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+                alertDialog.setTitle(":(");
+                alertDialog.setMessage("No le ha dado a ningún barco.");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                openHomeActivity();
+                            }
+                        });
+                alertDialog.show();
+                imageView.setImageResource(R.drawable.fail);
+                rivalBoard.put(sindex,5);
+
+            }
+            JSONObject jsonObject= new JSONObject();
+            jsonObject.put("board",rivalBoard.toString());
+            jsonObject.put("score",pointsI);
+            jsonObject.put("destroyed_ships",destroy_ships);
+            APICalls.put("user/match/"+String.valueOf(user.getCurrentGame()),jsonObject,caller);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
     }
     public void createBoard(){
         JSONObject jsonObject=new JSONObject();
         JSONObject boardJSON=new JSONObject();
-        JSONObject boardJSONRival=new JSONObject();
         for(int i=0; i<board.size();i++){
             try {
                 boardJSON.put(String.valueOf(i),board.get(i));
@@ -62,37 +152,19 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
                 e.printStackTrace();
             }
         }
-        if(iniciada==false){
 
 
-            for(int i=0; i<board.size();i++){
-                try {
-                    boardJSONRival.put(String.valueOf(i),0);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        JSONArray boards=new JSONArray();
-        TextView tv_destroyedBoats= findViewById(R.id.txtNumDestroy);
-        TextView tv_points= findViewById(R.id.txtNumPoints);
 
-
-        String str_destroyedBoats= (String) tv_destroyedBoats.getText();
-        String str_points= (String) tv_points.getText();
 
         try {
-            boards.put( boardJSON);
-            boards.put(boardJSONRival);
-            JSONObject objBoards=new JSONObject();
-            objBoards.put("boards",boards);
-            jsonObject.put("board",objBoards);
-            jsonObject.put("destroyed_ships",Integer.parseInt(str_destroyedBoats));
-            jsonObject.put("score",Integer.parseInt(str_points));
+
+
+            jsonObject.put("board",boardJSON.toString());
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        APICalls.put("user/match/"+String.valueOf(user.getCurrentGame()),jsonObject,caller);
+        APICalls.put("user/match_board/"+String.valueOf(user.getCurrentGame()),jsonObject,caller);
 
     }
 
@@ -102,7 +174,7 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
         button.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
         Button button1=findViewById(R.id.btnBomb);
         button1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        Button button2=findViewById(R.id.btnStore);
+        Button button2=findViewById(R.id.btnSendBoard);
         button2.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
     }
 
@@ -112,7 +184,7 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
         button.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
         Button button1=findViewById(R.id.btnBoat);
         button1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        Button button2=findViewById(R.id.btnStore);
+        Button button2=findViewById(R.id.btnSendBoard);
         button2.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
 
@@ -148,7 +220,8 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
 
                 break;
             case 1:
-                if( board.get(position)==0 && numbomb!=0){
+                Log.d("PositionC", String.valueOf(board.get(position)));
+                if( board.get(position)!=2 && numbomb!=0){
                     imageView.setImageResource(R.drawable.boom);
                     board.set(position,2);
                     numbomb--;
@@ -187,19 +260,15 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
 
 
     }
-    public void loadBoard(){
+    public void loadBoard(JSONObject boardrival){
+        Log.d("loadBoard",boardrival.toString());
+        rivalBoard=boardrival;
 
     }
 
     public void initBoard(){
+        board=new ArrayList<Integer>();
 
-        TextView tv_availableBoats= findViewById(R.id.txtNumBoats);
-        TextView tv_destroyedBoats= findViewById(R.id.txtNumDestroy);
-        TextView tv_points= findViewById(R.id.txtNumPoints);
-
-        String str_availableBoats = (String) tv_availableBoats.getText();
-        String str_destroyedBoats= (String) tv_destroyedBoats.getText();
-        String str_points= (String) tv_points.getText();
         final GridLayout boardGame= findViewById(R.id.boardGame);
         boardGame.setColumnCount(7);
         boardGame.setRowCount(8);
@@ -220,37 +289,93 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
             imageView.setOnClickListener(clickListener);
             convertView.setVisibility(View.VISIBLE);
 
-            boardGame.addView(convertView,i);
-            board.add(0);
+
+            if(rivalBoard!=null){
+                try {
+                    int valuePosition=rivalBoard.getInt(String.valueOf(i));
+                    if(valuePosition==4){
+                        imageView.setImageResource(R.drawable.win);
+                    }else{
+                        if(valuePosition==5) {
+                            imageView.setImageResource(R.drawable.fail);
+                        }
+                    }
+                    board.add(valuePosition);
+
+                    boardGame.addView(convertView,i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }else {
+                board.add(0);
+                boardGame.addView(convertView,i);
+            }
 
         }
 
     }
     @Override
     public void receiveApiResponse(JSONObject response) {
-        Log.d("BoardMatch",response.toString());
+        Log.d("ResponseBoard",response.toString());
         switch (flag){
             case 0:
-                try {
+                if(!response.optBoolean("board_set")){
+                    state=0;
+                    Log.d("Partida","No se ha iniciado la partida");
+                    initBoard();
+                    findViewById(R.id.btnBomb).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.btnBoat).setVisibility(View.INVISIBLE);
+                }else{
+                    state=1;
+                    iniciada=true;
+                    TextView tv_destroyedBoats= findViewById(R.id.txtNumDestroy);
+                    TextView tv_points= findViewById(R.id.txtNumPoints);
+                    TextView boats= findViewById(R.id.txtNumBoats);
+                    String boatsS= (String) boats.getText();
 
-                    JSONObject game=response.getJSONObject("game");
-
-
-                    if(!game.optBoolean("board_set")){
-                        Log.d("Partida","No se ha iniciado la partida");
-                        initBoard();
-                    }else{
-                        iniciada=true;
-                        loadBoard();
-
+                    String points=response.optString("score");
+                    String deads=response.optString("lost_ships");
+                    Log.d("boats",boatsS);
+                    int boatsI= Integer.parseInt(boatsS)-Integer.parseInt(deads);
+                    boats.setText(String.valueOf(boatsI));
+                    tv_destroyedBoats.setText(deads);
+                    tv_points.setText(points);
+                    try {
+                        destroy_ships=response.getInt("destroyed_ships");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.d("PasoPorAca",response.toString());
+                    APICalls.get("user/match/"+String.valueOf(user.getCurrentGame()),caller);
+                    flag=1;
+                    findViewById(R.id.btnBoat).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.btnBomb).setVisibility(View.INVISIBLE);
+
                 }
+
                 break;
             case 1:
 
+
+                try {
+                    JSONObject obj = new JSONObject(response.optString("board"));
+                    loadBoard(obj);
+                    initBoard();
+                    Log.d("flag","1");
+                    flag=2;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
                 break;
+            case 2:
+                break;
+
+
+
         }
 
 
