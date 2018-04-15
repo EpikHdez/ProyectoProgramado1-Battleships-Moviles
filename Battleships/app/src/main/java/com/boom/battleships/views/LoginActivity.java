@@ -257,7 +257,10 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
 
                 try {
                     data.put("password",m_Text);
+
+                    Log.i("JSON", "onClick: " + data);
                     APICalls.post("auth/signup", data, caller);
+                    Log.i("JSON", "onClick: " + data);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

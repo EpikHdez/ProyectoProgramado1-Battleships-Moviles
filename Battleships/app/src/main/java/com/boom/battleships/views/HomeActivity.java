@@ -28,6 +28,22 @@ public class HomeActivity extends AppCompatActivity implements AsyncTaskRequeste
     User user;
     private ApiCaller caller;
     private int flag;
+    public void openStoreActivity(View view) {
+        Intent intent = new Intent(this, StoreActivity.class);
+        startActivity(intent);
+    }
+    public void openHelpActivity(View view) {
+        Intent intent = new Intent(this, HelpActivity.class);
+        startActivity(intent);
+    }
+    public void openChatsActivity(View view) {
+        Intent intent = new Intent(this, ChatsActivity.class);
+        startActivity(intent);
+    }
+    public void openScoreActivity(View view) {
+        Intent intent = new Intent(this, ScoreActivity.class);
+        startActivity(intent);
+    }
     private void openBoardActivity() {
         Intent intent = new Intent(this, BoardActivity.class);
         startActivity(intent);

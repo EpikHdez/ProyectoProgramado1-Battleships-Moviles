@@ -51,7 +51,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
             android:background="@color/colorPrimary"
-            android:text="Button"
+            android:text="Reportar Usuario"
             android:textColor="@color/cardview_light_background"
             tools:text="Privacidad" />
     </LinearLayout>

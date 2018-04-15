@@ -235,7 +235,8 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
 
                     JSONObject game=response.getJSONObject("game");
 
-                    if(game.isNull("board")){
+
+                    if(!game.optBoolean("board_set")){
                         Log.d("Partida","No se ha iniciado la partida");
                         initBoard();
                     }else{

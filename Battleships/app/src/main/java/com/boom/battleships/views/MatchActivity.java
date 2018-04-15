@@ -31,8 +31,7 @@ public class MatchActivity extends AppCompatActivity implements AsyncTaskRequest
         flag=0;
         APICalls.get("random/user",caller);
 
-        Intent intent = new Intent(this, BoardActivity.class);
-        startActivity(intent);
+
 
 
     }
@@ -66,13 +65,15 @@ public class MatchActivity extends AppCompatActivity implements AsyncTaskRequest
                     rival.put("rival_id",rival_id);
                     APICalls.post("user/match",rival,caller);
                     flag=1;
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 break;
             case 1:
                 Log.d("Match",response.toString());
-
+                Intent intent = new Intent(this, BoardActivity.class);
+                startActivity(intent);
 
                 break;
 

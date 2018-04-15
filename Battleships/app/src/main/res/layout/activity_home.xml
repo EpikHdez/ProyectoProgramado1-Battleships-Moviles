@@ -30,7 +30,8 @@
                 android:layout_height="55dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/chat" />
+                android:background="@drawable/chat"
+                android:onClick="openChatsActivity" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -43,7 +44,8 @@
                 android:layout_height="55dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/store" />
+                android:background="@drawable/store"
+                android:onClick="openStoreActivity" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -56,7 +58,8 @@
                 android:layout_height="55dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/top" />
+                android:background="@drawable/top"
+                android:onClick="openScoreActivity" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -69,7 +72,8 @@
                 android:layout_height="55dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/info" />
+                android:background="@drawable/info"
+                android:onClick="openHelpActivity" />
 
             <Space
                 android:layout_width="wrap_content"

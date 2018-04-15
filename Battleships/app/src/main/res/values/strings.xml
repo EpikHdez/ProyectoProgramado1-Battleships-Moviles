@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Battleships</string>
-    <string name="api_url">https://boombattleships.herokuapp.com/api/v1/</string>
 
     <!-- Strings related to Facebook -->
     <string name="facebook_app_id">259410561266895</string>

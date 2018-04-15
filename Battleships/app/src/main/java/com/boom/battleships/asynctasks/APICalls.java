@@ -27,7 +27,7 @@ public class APICalls {
     private static Map<String, String> headers;
 
     public static void init(Context context) {
-        BASE_URL = context.getResources().getString(R.string.api_url);
+        BASE_URL = "http://192.168.0.111:3000/api/v1/";
         headers = new HashMap<>();
 
         addHeader("Content-Type", "application/json");
