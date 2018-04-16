@@ -3,31 +3,33 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAccent"
     android:orientation="vertical"
     android:padding="20dp">
 
     <LinearLayout
         android:id="@+id/chatControls"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/messageEdit"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
+            android:layout_height="40dp"
+            android:layout_weight="0.8"
+            android:background="@drawable/border2"
             android:hint="@string/typeMessage"
-            android:layout_weight="0.8"/>
+            android:inputType="textMultiLine" />
 
         <ImageButton
             android:id="@+id/chatSendButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_menu_send"
+            android:layout_weight="0.2"
             android:background="@android:color/transparent"
-            android:layout_weight="0.2"/>
+            android:src="@drawable/ic_menu_send" />
 
     </LinearLayout>
 
@@ -35,13 +37,13 @@
         android:id="@+id/messagesContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/chatControls"
         android:layout_alignParentLeft="false"
         android:layout_alignParentTop="false"
         android:layout_marginBottom="20dp"
-        android:layout_above="@+id/chatControls"
         android:layout_marginTop="10dp"
+        android:divider="@null"
         android:listSelector="@android:color/transparent"
-        android:transcriptMode="alwaysScroll"
-        android:divider="@null" />
+        android:transcriptMode="alwaysScroll" />
 
 </RelativeLayout>

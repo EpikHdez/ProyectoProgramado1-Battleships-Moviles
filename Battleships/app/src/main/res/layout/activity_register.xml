@@ -23,15 +23,18 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center_horizontal"
+                android:background="@drawable/profile"
                 android:onClick="onImgPictureClicked"
-                app:srcCompat="@color/cardview_shadow_start_color" />
+                />
 
             <EditText
                 android:id="@+id/txtName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                android:background="@drawable/border"
                 android:ems="10"
+                android:gravity="center"
                 android:hint="Nombre"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/cardview_light_background" />
@@ -41,7 +44,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/border"
                 android:ems="10"
+                android:gravity="center"
                 android:hint="Correo"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/cardview_light_background" />
@@ -51,7 +56,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/border"
                 android:ems="10"
+                android:gravity="center"
                 android:hint="Contraseña"
                 android:inputType="textPassword"
                 android:textColor="@color/cardview_light_background" />
@@ -67,9 +74,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimary"
+                    android:background="@drawable/borderbuttonslogin"
                     android:onClick="onBtnCancelClicked"
-                    android:text="@string/btnCancel" />
+                    android:text="@string/btnCancel"
+                    android:textAllCaps="false"
+                    android:textColor="@color/cardview_light_background" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -81,9 +90,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimary"
+                    android:background="@drawable/borderbuttonslogin"
                     android:onClick="onBtnRegisterClicked"
-                    android:text="@string/btnRegister" />
+                    android:text="@string/btnRegister"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorAccentLight" />
             </LinearLayout>
 
             <TextView
@@ -95,7 +106,7 @@
                 android:onClick="onLblRecoverPasswordClicked"
                 android:text="@string/lblRecoverPassword"
                 android:textAlignment="center"
-                android:textColor="@color/colorLink"
+                android:textColor="@color/cardview_light_background"
                 android:textSize="18sp" />
         </LinearLayout>
     </RelativeLayout>

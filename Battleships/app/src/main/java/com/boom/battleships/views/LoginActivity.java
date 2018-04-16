@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Picture;
-import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,7 +12,6 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,14 +31,13 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +55,7 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
     public static final String Picture = "pictureKey";
     public static final String Email = "emailKey";
     private String passTemp;
+    private int flag=0;
 
     public void getFriends(){
         new GraphRequest(
@@ -90,6 +86,7 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
             data.put("password", pass);
             Log.d("email",email);
             Log.d("pass",pass);
+            flag=1;
             APICalls.post("auth/login", data, caller);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -103,37 +100,59 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
         caller= this;
         FacebookSdk.sdkInitialize(getApplicationContext());
         setUpFacebookLoginButton();
+
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
         if(isLoggedIn()) {
-            findViewById(R.id.btnRegisterWIthEmail).setVisibility(View.INVISIBLE);
-            findViewById(R.id.btnlogin).setVisibility(View.INVISIBLE);
-            findViewById(R.id.txtmail).setVisibility(View.INVISIBLE);
-            findViewById(R.id.txtpass).setVisibility(View.INVISIBLE);
-            findViewById(R.id.mail).setVisibility(View.INVISIBLE);
-            findViewById(R.id.pass).setVisibility(View.INVISIBLE);
+
+                findViewById(R.id.btnRegisterWIthEmail).setVisibility(View.INVISIBLE);
+                findViewById(R.id.btnlogin).setVisibility(View.INVISIBLE);
+                findViewById(R.id.txtmail).setVisibility(View.INVISIBLE);
+                findViewById(R.id.txtpass).setVisibility(View.INVISIBLE);
 
 
-            Map<String,?> keys = sharedpreferences.getAll();
 
-            for(Map.Entry<String,?> entry : keys.entrySet()){
-                Log.d("map values",entry.getKey() + ": " + entry.getValue().toString());
-            }
-            JSONObject data = new JSONObject();
-            try {
-                User user=User.getInstance();
-                user.setEmail(sharedpreferences.getString(Email, ""));
+                Map<String,?> keys = sharedpreferences.getAll();
 
-                data.put("email",sharedpreferences.getString(Email, ""));
-                data.put("password",sharedpreferences.getString(Pass, ""));
-                APICalls.post("auth/login",data,caller);
+                for(Map.Entry<String,?> entry : keys.entrySet()){
+                    Log.d("map values",entry.getKey() + ": " + entry.getValue().toString());
+                }
+                JSONObject data = new JSONObject();
+                try {
+                    User user=User.getInstance();
+                    user.setEmail(sharedpreferences.getString(Email, ""));
+
+                    data.put("email",sharedpreferences.getString(Email, ""));
+                    data.put("password",sharedpreferences.getString(Pass, ""));
+                    flag=1;
+                    APICalls.post("auth/login",data,caller);
 
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
         }
 
+
     }
+    public void disconnectFromFacebook() {
+
+        if (AccessToken.getCurrentAccessToken() == null) {
+            return; // already logged out
+        }
+
+        new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
+                .Callback() {
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+
+                LoginManager.getInstance().logOut();
+
+            }
+        }).executeAsync();
+    }
+
 
     /**
      * This is called when the login attempt from Facebook ends, this is because this process occurs
@@ -168,16 +187,14 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
                     findViewById(R.id.btnlogin).setVisibility(View.VISIBLE);
                     findViewById(R.id.txtmail).setVisibility(View.VISIBLE);
                     findViewById(R.id.txtpass).setVisibility(View.VISIBLE);
-                    findViewById(R.id.mail).setVisibility(View.VISIBLE);
-                    findViewById(R.id.pass).setVisibility(View.VISIBLE);
 
                 }
             }
         };
-        if (fbProfile == null) {
+
             cbManager = CallbackManager.Factory.create();
             loginButton = findViewById(R.id.login_button);
-
+            loginButton.setBackgroundResource(R.drawable.borderbuttonsface);
             final List<String> readPermissions = Arrays.asList("public_profile", "email", "user_friends");
             loginButton.setReadPermissions(readPermissions);
 
@@ -216,14 +233,14 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
                                             facebookParameters = data;
 
                                             Log.d("FacebookParameters", facebookParameters.toString());
-
+                                            sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                                             requestPassword(facebookParameters);
+
                                             findViewById(R.id.btnRegisterWIthEmail).setVisibility(View.INVISIBLE);
                                             findViewById(R.id.btnlogin).setVisibility(View.INVISIBLE);
                                             findViewById(R.id.txtmail).setVisibility(View.INVISIBLE);
                                             findViewById(R.id.txtpass).setVisibility(View.INVISIBLE);
-                                            findViewById(R.id.mail).setVisibility(View.INVISIBLE);
-                                            findViewById(R.id.pass).setVisibility(View.INVISIBLE);
+
 
 
                                         } catch (Exception ex) {
@@ -261,7 +278,7 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
                     showToastMessage(R.string.onFacebookLoginError, Toast.LENGTH_LONG);
                 }
             });
-        }
+
     }
 
     /**
@@ -308,18 +325,15 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
 
 
 
+
                 try {
                     data.put("password",m_Text);
 
                     Log.i("JSON", "onClick: " + data);
+                    flag=0;
                     APICalls.post("auth/signup", data, caller);
                     Log.i("JSON", "onClick: " + data);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
-
-                try {
                     SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putString(Name, (String) data.get("name"));
                     editor.putString(Pass, (String) data.get("password"));
@@ -329,6 +343,7 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
                     JSONObject loginObj = new JSONObject();
                     loginObj.put("email",data.get("email"));
                     loginObj.put("password",data.get("password") );
+                    flag=1;
                     APICalls.post("auth/login", loginObj, caller);
 
                 } catch (JSONException e) {
@@ -383,6 +398,7 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
             user.setName((String) jsonUser.get("name"));
             user.setPicture((String) jsonUser.get("picture"));
             user.setMoney((Integer)jsonUser.get("money"));
+            user.setEmail((String) jsonUser.get("email"));
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString(Name, (String) jsonUser.get("name"));
             editor.putString(Pass, passTemp);
@@ -399,6 +415,21 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
 
     @Override
     public void receiveApiError(VolleyError error) {
+        switch (flag){
+            case 0:
+                break;
+            case 1:
+                /*
+                    disconnectFromFacebook();
+                    findViewById(R.id.btnRegisterWIthEmail).setVisibility(View.VISIBLE);
+                    findViewById(R.id.btnlogin).setVisibility(View.VISIBLE);
+                    findViewById(R.id.txtmail).setVisibility(View.VISIBLE);
+                    findViewById(R.id.txtpass).setVisibility(View.VISIBLE);
+                */
+                break;
+
+        }
+
 
     }
 

@@ -27,33 +27,35 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:background="@color/colorPrimary"
-            android:text="Reglas"
+            android:background="@drawable/borderbuttons"
+            android:text="Reglas y Privacidad"
             android:textColor="@color/cardview_light_background"
             android:textColorHighlight="@color/cardview_light_background" />
 
         <Button
-            android:id="@+id/button13"
+            android:id="@+id/btnEditProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:background="@color/colorPrimary"
-            android:text="Soporte"
+            android:background="@drawable/borderbuttons"
+            android:onClick="openEditProfileActivity"
+            android:text="Editar Perfil"
             android:textColor="@color/cardview_light_background" />
 
         <Button
-            android:id="@+id/button14"
+            android:id="@+id/btnSuport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/borderbuttons"
+            android:onClick="openReportActivity"
             android:text="Reportar Usuario"
-            android:textColor="@color/cardview_light_background"
-            tools:text="Privacidad" />
+            android:textColor="@color/cardview_light_background" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

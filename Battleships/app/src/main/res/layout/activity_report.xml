@@ -23,24 +23,28 @@
             android:textSize="30sp" />
 
         <EditText
-            android:id="@+id/editText4"
+            android:id="@+id/txtReport"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:background="@color/colorAccentLight"
+
             android:ems="10"
+            android:foregroundGravity="top"
+            android:background="@drawable/border"
+            android:hint="Ingrese su Comentario aquí..."
             android:inputType="textMultiLine"
             android:textColor="@color/colorAccentDark" />
 
         <Button
             android:id="@+id/button15"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/borderbuttons"
+            android:onClick="sendEmail"
             android:text="Enviar"
             android:textColor="@color/colorAccentLight" />
     </LinearLayout>

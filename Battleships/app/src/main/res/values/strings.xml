@@ -25,6 +25,6 @@
 
     <!-- Strings related to chats activity -->
     <string name="chats_title">Conversaciones</string>
-    <string name="typeMessage">Escribe...</string>
+    <string name="typeMessage"> Escribe...</string>
 
 </resources>
