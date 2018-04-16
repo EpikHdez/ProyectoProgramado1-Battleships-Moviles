@@ -25,10 +25,12 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                app:srcCompat="@drawable/profile4"
-                android:layout_marginBottom="10dp"/>
+                android:layout_width="275dp"
+                android:layout_height="275dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                app:srcCompat="@drawable/profile4" />
 
             <EditText
                 android:id="@+id/txtmail"

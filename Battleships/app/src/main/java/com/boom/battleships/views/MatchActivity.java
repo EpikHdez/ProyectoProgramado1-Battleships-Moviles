@@ -12,6 +12,7 @@ import com.boom.battleships.R;
 import com.boom.battleships.asynctasks.APICalls;
 import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
+import com.boom.battleships.model.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,6 +75,12 @@ public class MatchActivity extends AppCompatActivity implements AsyncTaskRequest
                 break;
             case 1:
                 Log.d("Match",response.toString());
+                User user= User.getInstance();
+                try {
+                    user.setCurrentGame(response.getInt("id"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 Intent intent = new Intent(this, BoardActivity.class);
                 startActivity(intent);
 

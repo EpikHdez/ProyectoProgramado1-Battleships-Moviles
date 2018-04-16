@@ -35,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class BoardActivity extends AppCompatActivity implements AsyncTaskRequester, ApiCaller {
@@ -77,6 +78,21 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
         startActivity(intent);
         finish();
     }
+    public ArrayList<Integer> convertJsontoBoardArray(JSONObject jsonObject){
+
+
+
+        ArrayList<Integer> newboard=new ArrayList<>();
+        for(int i=0;i<board.size();i++){
+            try {
+                newboard.add(jsonObject.getInt(String.valueOf(i)));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return newboard;
+
+    }
     public void sendBomb(){
         int index= board.indexOf(2);
         try {
@@ -101,6 +117,7 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
                rivalBoard.put(sindex,4);
                pointsI+=100;
                destroy_ships+=1;
+                Log.d("boats", String.valueOf(Collections.frequency(convertJsontoBoardArray(rivalBoard), 1)));
                 AlertDialog alertDialog = new AlertDialog.Builder(this).create();
                 alertDialog.setTitle(":)");
                 alertDialog.setMessage("Le ha dado a un barco.");
@@ -130,11 +147,33 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
                 rivalBoard.put(sindex,5);
 
             }
-            JSONObject jsonObject= new JSONObject();
-            jsonObject.put("board",rivalBoard.toString());
-            jsonObject.put("score",pointsI);
-            jsonObject.put("destroyed_ships",destroy_ships);
-            APICalls.put("user/match/"+String.valueOf(user.getCurrentGame()),jsonObject,caller);
+            if(Collections.frequency(convertJsontoBoardArray(rivalBoard), 1)!=0) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("board", rivalBoard.toString());
+                jsonObject.put("score", pointsI);
+                jsonObject.put("destroyed_ships", destroy_ships);
+                APICalls.put("user/match/" + String.valueOf(user.getCurrentGame()), jsonObject, caller);
+            }else{
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("board", rivalBoard.toString());
+                jsonObject.put("score", pointsI);
+                jsonObject.put("destroyed_ships", destroy_ships);
+                jsonObject.put("finished", true);
+                jsonObject.put("victory", true);
+
+                APICalls.put("user/match/" + String.valueOf(user.getCurrentGame()), jsonObject, caller);
+                AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+                alertDialog.setTitle("¡Felicidades!");
+                alertDialog.setMessage("Ha ganado la partida.");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                openHomeActivity();
+                            }
+                        });
+                alertDialog.show();
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

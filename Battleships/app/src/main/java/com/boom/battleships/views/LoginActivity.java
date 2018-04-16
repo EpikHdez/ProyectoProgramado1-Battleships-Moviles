@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -98,6 +99,11 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         caller= this;
+        User user=User.getInstance();
+        MediaPlayer ring= MediaPlayer.create(this,R.raw.music);
+        ring.setLooping(true);
+        ring.start();
+        user.setMusicBack(ring);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setUpFacebookLoginButton();
 
@@ -119,7 +125,7 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
                 }
                 JSONObject data = new JSONObject();
                 try {
-                    User user=User.getInstance();
+
                     user.setEmail(sharedpreferences.getString(Email, ""));
 
                     data.put("email",sharedpreferences.getString(Email, ""));

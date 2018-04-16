@@ -1,5 +1,7 @@
 package com.boom.battleships.model;
 
+import android.media.MediaPlayer;
+
 import java.util.ArrayList;
 
 /**
@@ -14,6 +16,24 @@ public class User {
     private String email;
     private int money;
     private int currentGame;
+    private boolean music=true;
+    private MediaPlayer musicBack;
+
+    public MediaPlayer getMusicBack() {
+        return musicBack;
+    }
+
+    public void setMusicBack(MediaPlayer musicBack) {
+        this.musicBack = musicBack;
+    }
+
+    public boolean isMusic() {
+        return music;
+    }
+
+    public void setMusic(boolean music) {
+        this.music = music;
+    }
 
     public int getCurrentGame() {
         return currentGame;

@@ -84,6 +84,7 @@ public class HomeActivity extends AppCompatActivity implements AsyncTaskRequeste
 
     }
     public void showMatches(JSONObject response){
+        Log.d("showMatches",response.toString());
         ListView currentGamesView;
         ListView finishedGamesView;
         try {
@@ -92,21 +93,35 @@ public class HomeActivity extends AppCompatActivity implements AsyncTaskRequeste
             List<RowItem> rowItemsfinished = new ArrayList<RowItem>();
             for (int i = 0; i < matches.length(); i++) {
                 JSONObject jsonObject=matches.getJSONObject(i);
-
-                boolean turn= (Boolean) jsonObject.get("turn");
-                int id= (Integer) jsonObject.get("id");
-                JSONObject rival= (JSONObject) jsonObject.get("rival");
-                String name= (String) rival.get("name");
-                String picture= (String) rival.get("picture");
+                boolean turn = (Boolean) jsonObject.get("turn");
+                boolean finished = (Boolean) jsonObject.get("finished");
+                int id = (Integer) jsonObject.get("id");
+                JSONObject rival = (JSONObject) jsonObject.get("rival");
+                String name = (String) rival.get("name");
+                String picture = (String) rival.get("picture");
                 RowItem item;
-                if(turn){
-                    item = new RowItem(picture,name, "Su turno.",id);
+                if(!finished) {
+
+
+                    if (turn) {
+                        item = new RowItem(picture, name, "Su turno.", id);
+                    } else {
+                        item = new RowItem(picture, name, "Espere su turno.", id);
+
+                    }
+
+                    rowItems.add(item);
                 }else{
-                    item = new RowItem(picture,name, "Espere su turno.",id);
+                    boolean victory = (Boolean) jsonObject.get("victory");
+                    if (victory) {
+                        item = new RowItem(picture, name, "Ganador.", id);
+                    } else {
+                        item = new RowItem(picture, name, "Perdedor.", id);
+
+                    }
+                    rowItemsfinished.add(item);
 
                 }
-
-                rowItems.add(item);
             }
             currentGamesView = (ListView) findViewById(R.id.currentGames);
             CustomListViewAdapter adapter = new CustomListViewAdapter(this,
@@ -128,8 +143,11 @@ public class HomeActivity extends AppCompatActivity implements AsyncTaskRequeste
 
 
             });
+            CustomListViewAdapter adapterFinished = new CustomListViewAdapter(this,
+                    R.layout.listview_game, rowItemsfinished);
+
             finishedGamesView = (ListView) findViewById(R.id.finishedGames);
-            finishedGamesView .setAdapter(adapter);
+            finishedGamesView .setAdapter(adapterFinished);
         } catch (JSONException e) {
             e.printStackTrace();
         }
