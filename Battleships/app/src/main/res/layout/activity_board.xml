@@ -137,13 +137,13 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/btnBoat"
+                android:id="@+id/btnInventory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorPrimaryDark"
-                android:onClick="onClickBoats"
-                android:text="Barcos"
+                android:background="@drawable/borderbuttonslogin"
+                android:onClick="openInventoryActivity"
+                android:text="@string/Inventory"
                 android:textColor="@color/cardview_light_background" />
 
             <Space
@@ -152,13 +152,13 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/btnBomb"
+                android:id="@+id/btnStore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary"
-                android:onClick="onClickBombs"
-                android:text="Bombas"
+                android:background="@drawable/borderbuttonslogin"
+                android:onClick="openStoreActivity"
+                android:text="@string/store"
                 android:textColor="@color/cardview_light_background" />
 
             <Space
@@ -171,7 +171,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/borderbuttonslogin"
                 android:onClick="sendBoard"
                 android:text="Enviar"
                 android:textColor="@color/cardview_light_background" />

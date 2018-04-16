@@ -18,6 +18,15 @@ public class User {
     private int currentGame;
     private boolean music=true;
     private MediaPlayer musicBack;
+    private boolean facebook;
+
+    public boolean isFacebook() {
+        return facebook;
+    }
+
+    public void setFacebook(boolean facebook) {
+        this.facebook = facebook;
+    }
 
     public MediaPlayer getMusicBack() {
         return musicBack;

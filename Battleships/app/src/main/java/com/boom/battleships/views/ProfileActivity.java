@@ -1,7 +1,9 @@
 package com.boom.battleships.views;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +25,14 @@ import org.json.JSONObject;
 public class ProfileActivity extends AppCompatActivity implements AsyncTaskRequester, ApiCaller {
     private Uri selectedImageUri;
     private ApiCaller caller;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    public void dispatchTakePictureIntent(View view) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
     public void onImgPictureClicked(View view) {
         Intent intent = new Intent();
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -37,12 +47,20 @@ public class ProfileActivity extends AppCompatActivity implements AsyncTaskReque
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK) {
+        if(resultCode == RESULT_OK && requestCode != REQUEST_IMAGE_CAPTURE) {
             if (requestCode == 1001) {
                 Uri imageUri = data.getData();
                 ImageView picture = findViewById(R.id.imgProfile);
                 Picasso.get().load(imageUri).into(picture);
                 selectedImageUri = imageUri;
+            }
+        }else{
+            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                ImageView picture = findViewById(R.id.imgPicture);
+                picture.setImageBitmap(imageBitmap);
+
             }
         }
     }

@@ -48,7 +48,14 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
     private boolean iniciada=false;
     private JSONObject rivalBoard;
     private int destroy_ships;
-
+    public void openStoreActivity(View view) {
+        Intent intent = new Intent(this, StoreActivity.class);
+        startActivity(intent);
+    }
+    public void openInventoryActivity(View view) {
+        Intent intent = new Intent(this, InventoryActivity.class);
+        startActivity(intent);
+    }
     public void sendBoard(View view){
         if(!iniciada) {
             flag = 1;
@@ -207,27 +214,9 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
 
     }
 
-    public void onClickBoats(View view){
-        state=0;
-        Button button=findViewById(R.id.btnBoat);
-        button.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        Button button1=findViewById(R.id.btnBomb);
-        button1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        Button button2=findViewById(R.id.btnSendBoard);
-        button2.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-    }
-
-    public void onClickBombs(View view){
-        state=1;
-        Button button=findViewById(R.id.btnBomb);
-        button.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        Button button1=findViewById(R.id.btnBoat);
-        button1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        Button button2=findViewById(R.id.btnSendBoard);
-        button2.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
 
-    }
+
 
     public void changeImage(ImageView imageView, int position){
         TextView tv_availableBoats= findViewById(R.id.txtNumBoats);
@@ -363,8 +352,7 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
                     state=0;
                     Log.d("Partida","No se ha iniciado la partida");
                     initBoard();
-                    findViewById(R.id.btnBomb).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.btnBoat).setVisibility(View.INVISIBLE);
+
                 }else{
                     state=1;
                     iniciada=true;
@@ -388,8 +376,7 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
                     Log.d("PasoPorAca",response.toString());
                     APICalls.get("user/match/"+String.valueOf(user.getCurrentGame()),caller);
                     flag=1;
-                    findViewById(R.id.btnBoat).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.btnBomb).setVisibility(View.INVISIBLE);
+
 
                 }
 

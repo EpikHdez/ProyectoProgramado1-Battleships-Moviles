@@ -5,7 +5,8 @@
     <!-- Permissions -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
     <application
         android:name=".MyCustomApplication"
         android:icon="@mipmap/ic_launcher"
@@ -67,7 +68,8 @@
             android:name=".views.ChatsActivity"
             android:label="@string/chats_title" />
         <activity android:name=".views.ProfileActivity" />
-        <activity android:name=".views.CreateChat"></activity>
+        <activity android:name=".views.CreateChat" />
+        <activity android:name=".views.InventoryActivity"></activity>
     </application>
 
 </manifest>

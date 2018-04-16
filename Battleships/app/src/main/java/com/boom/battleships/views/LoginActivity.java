@@ -130,13 +130,36 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
 
                     data.put("email",sharedpreferences.getString(Email, ""));
                     data.put("password",sharedpreferences.getString(Pass, ""));
-                    flag=1;
+                    flag=2;
                     APICalls.post("auth/login",data,caller);
 
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+        }else{
+
+            String username = sharedpreferences.getString(Email,null);
+            String password = sharedpreferences.getString(Pass,null);
+            if (username != null && password != null )
+            {
+                JSONObject data = new JSONObject();
+                try {
+
+                    user.setEmail(sharedpreferences.getString(Email, ""));
+
+                    data.put("email",sharedpreferences.getString(Email, ""));
+                    data.put("password",sharedpreferences.getString(Pass, ""));
+                    flag=2;
+                    APICalls.post("auth/login",data,caller);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
 
         }
 
@@ -305,6 +328,7 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
     private void openHomeActivity() {
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
+        finish();
 
         //Uncomment to finish this activity and avoid going back here when the back button is pressed.
         //finish();
@@ -424,14 +448,14 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
         switch (flag){
             case 0:
                 break;
-            case 1:
-                /*
+            case 2:
+
                     disconnectFromFacebook();
                     findViewById(R.id.btnRegisterWIthEmail).setVisibility(View.VISIBLE);
                     findViewById(R.id.btnlogin).setVisibility(View.VISIBLE);
                     findViewById(R.id.txtmail).setVisibility(View.VISIBLE);
                     findViewById(R.id.txtpass).setVisibility(View.VISIBLE);
-                */
+
                 break;
 
         }

@@ -26,5 +26,8 @@
     <!-- Strings related to chats activity -->
     <string name="chats_title">Conversaciones</string>
     <string name="typeMessage"> Escribe...</string>
+    <string name="Inventory">Inventario</string>
+    <string name="store">Tienda</string>
+    <string name="title_activity_inventory">InventoryActivity</string>
 
 </resources>

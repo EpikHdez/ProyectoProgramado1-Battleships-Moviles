@@ -16,12 +16,22 @@
 
         <ImageView
             android:id="@+id/imgProfile"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="10dp"
             android:onClick="onImgPictureClicked"
-            app:srcCompat="@drawable/profile" />
+            app:srcCompat="@drawable/profile"
+
+            />
+
+        <Button
+            android:id="@+id/btnCamera2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/camera"
+            android:onClick="dispatchTakePictureIntent" />
 
         <TextView
             android:id="@+id/textView13"

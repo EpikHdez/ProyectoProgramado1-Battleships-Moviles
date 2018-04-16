@@ -15,8 +15,9 @@ public class HelpActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-    public void openEditProfileActivity(View view) {
-        Intent intent = new Intent(this,ProfileActivity.class);
+
+    public void openConfigurationActivity(View view) {
+        Intent intent = new Intent(this,ConfigurationActivity.class);
         startActivity(intent);
 
     }
