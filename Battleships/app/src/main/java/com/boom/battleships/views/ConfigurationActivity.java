@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.boom.battleships.R;
+import com.boom.battleships.asynctasks.APICalls;
 import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
 import com.boom.battleships.model.User;
@@ -27,12 +28,26 @@ public class ConfigurationActivity extends AppCompatActivity implements AsyncTas
     private User user;
     SharedPreferences sharedpreferences;
     public static final String MyPREFERENCES = "MyPrefs" ;
-    public static final String Name = "nameKey";
-    public static final String Pass = "passKey";
-    public static final String Picture = "pictureKey";
-    public static final String Email = "emailKey";
 
 
+    @Override
+    protected void onResume() {
+
+
+        super.onResume();
+        ImageView picture = findViewById(R.id.imgProfile);
+        Picasso.get().load(user.getPicture()).into(picture);
+        TextView txtname = findViewById(R.id.txtName);
+        txtname.setText(user.getName());
+        Button btnSound = findViewById(R.id.btnSound);
+        if (user.isMusic()) {
+            btnSound.setText("No");
+        } else {
+            btnSound.setText("Si");
+        }
+
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

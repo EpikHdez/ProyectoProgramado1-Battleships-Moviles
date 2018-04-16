@@ -2,18 +2,21 @@ package com.boom.battleships.views;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.boom.battleships.R;
 import com.boom.battleships.asynctasks.APICalls;
+import com.boom.battleships.asynctasks.UploadImage;
 import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
 import com.boom.battleships.model.User;
@@ -26,6 +29,7 @@ public class ProfileActivity extends AppCompatActivity implements AsyncTaskReque
     private Uri selectedImageUri;
     private ApiCaller caller;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    private User user;
 
     public void dispatchTakePictureIntent(View view) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -53,32 +57,29 @@ public class ProfileActivity extends AppCompatActivity implements AsyncTaskReque
                 ImageView picture = findViewById(R.id.imgProfile);
                 Picasso.get().load(imageUri).into(picture);
                 selectedImageUri = imageUri;
+
             }
         }else{
             if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                Uri imageUri = data.getData();
                 ImageView picture = findViewById(R.id.imgPicture);
-                picture.setImageBitmap(imageBitmap);
+                Picasso.get().load(imageUri).into(picture);
+                selectedImageUri = imageUri;
 
             }
+
         }
+
     }
     public void changeProfile(View view){
-        JSONObject jsonObject=new JSONObject();
-        User user= User.getInstance();
-        TextView nametxt=findViewById(R.id.txtName);
-        TextView mailtxt=findViewById(R.id.txtMail);
-        String nameS= (String) nametxt.getText();
-        String mailS= (String) mailtxt.getText();
-        try {
-            jsonObject.put("picture",user.getPicture());
-            jsonObject.put("name",nameS);
-            jsonObject.put("email",mailS);
-            APICalls.put("me",jsonObject,caller);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if(selectedImageUri != null) {
+            Log.d("Subiendo", "si");
+            new UploadImage(this).execute(selectedImageUri);
+        }else {
+            Log.d("Subiendo", "no");
+            registerUser(null);
         }
+
 
 
     }
@@ -86,7 +87,7 @@ public class ProfileActivity extends AppCompatActivity implements AsyncTaskReque
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        User user= User.getInstance();
+        user= User.getInstance();
         caller=this;
         Log.d("Name",user.getName());
         Log.d("Email",user.getEmail());
@@ -100,9 +101,49 @@ public class ProfileActivity extends AppCompatActivity implements AsyncTaskReque
         txtmail.setText(user.getEmail());
 
     }
+    private void registerUser(String pictureURL) {
+        //TODO register user into the DB
+        JSONObject jsonObject=new JSONObject();
+        User user= User.getInstance();
+        ImageView imageView=findViewById(R.id.imgProfile);
+        TextView nametxt=findViewById(R.id.txtName);
+        TextView mailtxt=findViewById(R.id.txtMail);
+        String nameS= nametxt.getText().toString();
+        String mailS= mailtxt.getText().toString();
+        Picasso.get().load(pictureURL).into(imageView);
+        try {
+            jsonObject.put("picture",pictureURL);
+            jsonObject.put("name",nameS);
+            jsonObject.put("email",mailS);
+            APICalls.put("me",jsonObject,caller);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void receiveApiResponse(JSONObject response) {
+        Log.d("ResponseProfile",response.toString());
+        try {
+            String name=response.getString("name");
+            String email=response.getString("email");
+            String picture=response.getString("picture");
+            user.setEmail(email);
+            user.setName(name);
+            user.setPicture(picture);
+            ImageView imageView=findViewById(R.id.imgProfile);
+            TextView nametxt=findViewById(R.id.txtName);
+            TextView mailtxt=findViewById(R.id.txtMail);
+            nametxt.setText(user.getName());
+            mailtxt.setText(user.getEmail());
+            Picasso.get().load(user.getPicture()).into(imageView);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -113,6 +154,7 @@ public class ProfileActivity extends AppCompatActivity implements AsyncTaskReque
 
     @Override
     public void receiveAsyncResponse(Object response) {
+        registerUser(response.toString());
 
     }
 }
