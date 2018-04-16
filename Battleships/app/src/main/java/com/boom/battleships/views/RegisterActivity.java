@@ -53,11 +53,10 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskRequ
             }
         }else{
             if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                Uri imageUri = data.getData();
                 ImageView picture = findViewById(R.id.imgPicture);
-                picture.setImageBitmap(imageBitmap);
-
+                Picasso.get().load(imageUri).into(picture);
+                selectedImageUri = imageUri;
             }
         }
     }
@@ -128,7 +127,7 @@ public class RegisterActivity extends AppCompatActivity implements AsyncTaskRequ
             data.put("password", txtPassword.getText().toString());
 
             if(pictureURL != null)
-                data.put("profile_picture", pictureURL);
+                data.put("picture", pictureURL);
 
             APICalls.post("auth/signup", data, this);
         } catch(Exception ex) {
