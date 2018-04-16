@@ -62,7 +62,7 @@ public class ProfileActivity extends AppCompatActivity implements AsyncTaskReque
         }else{
             if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                 Uri imageUri = data.getData();
-                ImageView picture = findViewById(R.id.imgPicture);
+                ImageView picture = findViewById(R.id.imgProfile);
                 Picasso.get().load(imageUri).into(picture);
                 selectedImageUri = imageUri;
 
