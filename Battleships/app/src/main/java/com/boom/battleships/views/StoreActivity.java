@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.boom.battleships.R;
@@ -11,6 +12,7 @@ import com.boom.battleships.asynctasks.APICalls;
 import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
 import com.boom.battleships.model.Element;
+import com.boom.battleships.model.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +23,8 @@ import java.util.List;
 
 public class StoreActivity extends AppCompatActivity implements AsyncTaskRequester, ApiCaller {
     private ApiCaller caller;
+    User user;
+
     public void setElements(JSONArray jsonArray){
         ListView elements;
 
@@ -47,12 +51,21 @@ public class StoreActivity extends AppCompatActivity implements AsyncTaskRequest
         CustomListStoreAdapter adapter = new CustomListStoreAdapter(this,
                 R.layout.listview_game, elementsList);
         elements.setAdapter(adapter);
+
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        caller=this;
         setContentView(R.layout.activity_store);
+        caller=this;
+        user= User.getInstance();
+
+        TextView moneyTXT=findViewById(R.id.txtMoney);
+        String money="Dinero: "+String.valueOf(user.getMoney());
+        Log.d("Money1",money);
+        moneyTXT.setText(money);
+
         APICalls.get("item",caller);
 
 
