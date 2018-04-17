@@ -73,6 +73,9 @@
         <activity android:name=".views.ProfileActivity" />
         <activity android:name=".views.CreateChat" />
         <activity android:name=".views.InventoryActivity"></activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="784815eed5bd1505440567de400ed55a430505c2" />
     </application>
 
 </manifest>
