@@ -1,4 +1,4 @@
-package com.boom.battleships.views;
+package com.boom.battleships.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,21 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.boom.battleships.R;
-import com.boom.battleships.asynctasks.APICalls;
 import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
-import com.boom.battleships.model.Element;
-import com.boom.battleships.model.User;
 import com.boom.battleships.model.User_Top;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;

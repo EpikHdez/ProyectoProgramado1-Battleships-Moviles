@@ -143,6 +143,8 @@
                 android:layout_marginRight="10dp" />
         </LinearLayout>
 
+        <include layout="@layout/progress_overlay" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

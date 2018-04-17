@@ -1,4 +1,4 @@
-package com.boom.battleships.views;
+package com.boom.battleships.adapters;
 
 import android.app.Activity;
 import android.content.Context;

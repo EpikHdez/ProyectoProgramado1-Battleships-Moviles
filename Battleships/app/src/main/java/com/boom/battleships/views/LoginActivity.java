@@ -22,6 +22,7 @@ import com.boom.battleships.asynctasks.APICalls;
 import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
 import com.boom.battleships.model.User;
+import com.boom.battleships.utils.BoomUtils;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -58,6 +59,7 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
     public static final String Email = "emailKey";
     private String passTemp;
     private int flag=0;
+    private View overlay;
 
     public void getFriends(){
         new GraphRequest(
@@ -75,6 +77,8 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
 
     }
     public void loginNoFace(View view){
+        BoomUtils.animateView(overlay, View.VISIBLE,0.4f, 200);
+
         JSONObject data = new JSONObject();
         try {
             User user = User.getInstance();
@@ -101,6 +105,8 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
 
         setContentView(R.layout.activity_login);
         caller= this;
+        overlay = findViewById(R.id.progress_overlay);
+
         User user=User.getInstance();
         MediaPlayer ring= MediaPlayer.create(this,R.raw.music);
         ring.setLooping(true);
@@ -328,6 +334,7 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
      * this one.
      */
     private void openHomeActivity() {
+        BoomUtils.animateView(overlay, View.GONE,0, 200);
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
         finish();
@@ -447,9 +454,14 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
 
     @Override
     public void receiveApiError(VolleyError error) {
+        BoomUtils.animateView(overlay, View.GONE,0, 200);
+
         switch (flag){
             case 0:
                 break;
+
+            case 1:
+                showToastMessage(R.string.onLoginFailed, Toast.LENGTH_LONG);
             case 2:
 
                     disconnectFromFacebook();

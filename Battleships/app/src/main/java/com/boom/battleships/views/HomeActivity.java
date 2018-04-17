@@ -1,6 +1,5 @@
 package com.boom.battleships.views;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,10 +11,12 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.boom.battleships.R;
+import com.boom.battleships.adapters.CustomListViewAdapter;
 import com.boom.battleships.asynctasks.APICalls;
 import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
 import com.boom.battleships.model.User;
+import com.boom.battleships.utils.BoomUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +29,8 @@ public class HomeActivity extends AppCompatActivity implements AsyncTaskRequeste
     User user;
     private ApiCaller caller;
     private int flag;
+    private View overlay;
+
     public void openStoreActivity(View view) {
         Intent intent = new Intent(this, StoreActivity.class);
         startActivity(intent);
@@ -65,6 +68,9 @@ public class HomeActivity extends AppCompatActivity implements AsyncTaskRequeste
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        overlay = findViewById(R.id.progress_overlay);
+        BoomUtils.animateView(overlay, View.VISIBLE, 0.4f, 200);
+
         caller=this;
 
         user=User.getInstance();
@@ -148,6 +154,8 @@ public class HomeActivity extends AppCompatActivity implements AsyncTaskRequeste
 
             finishedGamesView = (ListView) findViewById(R.id.finishedGames);
             finishedGamesView .setAdapter(adapterFinished);
+
+            BoomUtils.animateView(overlay, View.GONE, 0, 200);
         } catch (JSONException e) {
             e.printStackTrace();
         }

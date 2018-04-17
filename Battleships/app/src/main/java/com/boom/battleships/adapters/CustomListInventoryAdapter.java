@@ -1,4 +1,4 @@
-package com.boom.battleships.views;
+package com.boom.battleships.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,11 +16,9 @@ import com.boom.battleships.R;
 import com.boom.battleships.asynctasks.APICalls;
 import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
-import com.boom.battleships.model.Element;
 import com.boom.battleships.model.ElementInventory;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;

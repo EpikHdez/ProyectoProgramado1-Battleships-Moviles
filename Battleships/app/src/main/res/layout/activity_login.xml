@@ -92,5 +92,7 @@
                 android:textColor="@color/colorAccentLight" />
 
         </LinearLayout>
+
+        <include layout="@layout/progress_overlay" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

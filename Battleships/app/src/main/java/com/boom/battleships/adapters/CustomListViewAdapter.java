@@ -1,4 +1,4 @@
-package com.boom.battleships.views;
+package com.boom.battleships.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.boom.battleships.R;
+import com.boom.battleships.views.RowItem;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
