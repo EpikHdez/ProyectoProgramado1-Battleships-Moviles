@@ -48,6 +48,7 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
     private boolean iniciada=false;
     private JSONObject rivalBoard;
     private int destroy_ships;
+    private int points_money;
     public void openStoreActivity(View view) {
         Intent intent = new Intent(this, StoreActivity.class);
         startActivity(intent);
@@ -101,6 +102,7 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
 
     }
     public void sendBomb(){
+        flag=2;
         int index= board.indexOf(2);
         try {
             String sindex=String.valueOf(index);
@@ -115,7 +117,7 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
             String pointsS= (String) points.getText();
 
             int pointsI= Integer.parseInt(pointsS);
-
+            points_money=pointsI;
 
 
             if(boat==1){
@@ -123,6 +125,7 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
                imageView.setImageResource(R.drawable.win);
                rivalBoard.put(sindex,4);
                pointsI+=100;
+
                destroy_ships+=1;
                 Log.d("boats", String.valueOf(Collections.frequency(convertJsontoBoardArray(rivalBoard), 1)));
                 AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -393,12 +396,21 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
-
                 break;
             case 2:
+                JSONObject jsonObject=new JSONObject();
+                try {
+
+                    jsonObject.put("money", user.getMoney()+(points_money/2));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                user.setMoney(user.getMoney()+(points_money/2));
+                APICalls.put("me",jsonObject,caller);
+                flag=3;
                 break;
+
+
 
 
 

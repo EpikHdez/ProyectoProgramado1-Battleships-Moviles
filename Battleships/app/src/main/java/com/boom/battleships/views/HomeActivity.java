@@ -170,8 +170,7 @@ public class HomeActivity extends AppCompatActivity implements AsyncTaskRequeste
 
                 showMatches(response);
                 break;
-            case 1:
-                break;
+
         }
 
 

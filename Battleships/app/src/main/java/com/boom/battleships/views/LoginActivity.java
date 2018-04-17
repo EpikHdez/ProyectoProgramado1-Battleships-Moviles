@@ -36,6 +36,7 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -102,6 +103,8 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String projectToken =  "d69eec9a0db743021f142cb173cbb6d6"; // e.g.: "1ef7e30d2a58d27f4b90c42e31d6d7ad"
+        MixpanelAPI mixpanel = MixpanelAPI.getInstance(this, projectToken);
 
         setContentView(R.layout.activity_login);
         caller= this;
@@ -457,8 +460,6 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
         BoomUtils.animateView(overlay, View.GONE,0, 200);
 
         switch (flag){
-            case 0:
-                break;
 
             case 1:
                 showToastMessage(R.string.onLoginFailed, Toast.LENGTH_LONG);
