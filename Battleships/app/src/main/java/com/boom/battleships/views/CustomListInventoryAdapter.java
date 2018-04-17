@@ -17,7 +17,7 @@ import com.boom.battleships.asynctasks.APICalls;
 import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
 import com.boom.battleships.model.Element;
-import com.boom.battleships.model.User;
+import com.boom.battleships.model.ElementInventory;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -29,11 +29,11 @@ import java.util.List;
  * Created by Ximena on 14/4/2018.
  */
 
-public class CustomListStoreAdapter extends ArrayAdapter<Element> implements AsyncTaskRequester, ApiCaller {
+public class CustomListInventoryAdapter extends ArrayAdapter<ElementInventory> implements AsyncTaskRequester, ApiCaller {
     Context context;
     private ApiCaller caller;
-    public CustomListStoreAdapter(Context context, int resourceId,
-                                 List<Element> items) {
+    public CustomListInventoryAdapter(Context context, int resourceId,
+                                      List<ElementInventory> items) {
         super(context, resourceId, items);
         this.context = context;
     }
@@ -56,10 +56,10 @@ public class CustomListStoreAdapter extends ArrayAdapter<Element> implements Asy
     }
 
     /*private view holder class*/
-    private class ViewHolderElement {
+    private class ViewHolderElementInventory{
         ImageView imageView;
         TextView txtName;
-        TextView txtPrice;
+        TextView txtQuantity;
         Button button;
 
 
@@ -68,46 +68,38 @@ public class CustomListStoreAdapter extends ArrayAdapter<Element> implements Asy
 
     public View getView(int position, View convertView, ViewGroup parent) {
         caller=this;
-        CustomListStoreAdapter.ViewHolderElement holder = null;
-        final Element element = getItem(position);
+        CustomListInventoryAdapter.ViewHolderElementInventory holder = null;
+        final ElementInventory element = getItem(position);
         Log.d("position", String.valueOf(position));
 
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.listview_store, null);
-            holder = new CustomListStoreAdapter.ViewHolderElement();
+            convertView = mInflater.inflate(R.layout.listview_inventory, null);
+            holder = new CustomListInventoryAdapter.ViewHolderElementInventory();
             holder.txtName = (TextView) convertView.findViewById(R.id.txtName);
-            holder.txtPrice=(TextView) convertView.findViewById(R.id.txtPrice);
+            holder.txtQuantity = (TextView) convertView.findViewById(R.id.txtQuantity);
             holder.imageView = (ImageView) convertView.findViewById(R.id.icon);
-            holder.button= (Button) convertView.findViewById(R.id.btnShop);
+            holder.button= (Button) convertView.findViewById(R.id.btnUse);
 
             convertView.setTag(holder);
         } else
-            holder = (CustomListStoreAdapter.ViewHolderElement) convertView.getTag();
+            holder = (CustomListInventoryAdapter.ViewHolderElementInventory) convertView.getTag();
 
 
         holder.txtName.setText(element.getName());
-        String price=String.valueOf(element.getPrice());
-        Log.d("Price",price);
-        holder.txtPrice.setText(price);
-        Picasso.get().load(element.getImage()).into(holder.imageView);
+
+        String quantity=String.valueOf(element.getQuantity());
+
+        holder.txtQuantity.setText(String.valueOf(quantity));
+        Picasso.get().load(element.getPicture()).into(holder.imageView);
         holder.button.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 JSONObject jsonObject=new JSONObject();
-                try {
+                APICalls.put("user/item/"+String.valueOf(element.getIdItem()),jsonObject,caller);
 
-                    User user = User.getInstance();
-                    if(user.getMoney()>=element.getPrice()) {
-                        jsonObject.put("quantity",1);
-                        APICalls.post("item/"+String.valueOf(element.getId())+"/buy",jsonObject,caller);
-                        user.setMoney(user.getMoney() - element.getPrice());
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
 
 

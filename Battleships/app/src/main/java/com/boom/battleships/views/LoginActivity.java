@@ -43,6 +43,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+
 public class LoginActivity extends AppCompatActivity  implements AsyncTaskRequester, ApiCaller {
     //Facebook needed variables
     private CallbackManager cbManager;
@@ -97,6 +98,7 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
         caller= this;
         User user=User.getInstance();
