@@ -60,6 +60,11 @@ public class HomeActivity extends AppCompatActivity implements ApiCaller {
 
     }
 
+    public void openFindFriends(View view) {
+        Intent intent = new Intent(this, FindFriends.class);
+        startActivity(intent);
+    }
+
     public void startGame(View view){
         openMatchActivity();
     }

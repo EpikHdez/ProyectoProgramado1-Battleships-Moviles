@@ -4,19 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
-    tools:context="com.boom.battleships.views.ScoreActivity">
+    tools:context=".views.FindFriends"
+    android:background="@color/colorAccent">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <ListView
-            android:id="@+id/listScores"
+            android:id="@+id/usersList"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
-        <include layout="@layout/progress_overlay" />
-    </LinearLayout>
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

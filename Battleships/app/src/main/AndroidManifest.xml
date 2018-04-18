@@ -5,18 +5,21 @@
     <!-- Permissions -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".MyCustomApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:largeHeap="true">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".views.LoginActivity"
             android:screenOrientation="portrait"
@@ -56,38 +59,52 @@
         <activity android:name=".views.HomeActivity" />
         <activity
             android:name=".views.RegisterActivity"
+            android:parentActivityName=".views.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".views.LoginActivity"/>
-        <activity android:name=".views.BoardActivity"
-            android:parentActivityName=".views.HomeActivity"/>
-        <activity android:name=".views.MatchActivity"
-            android:parentActivityName=".views.HomeActivity"/>
-        <activity android:name=".views.ConfigurationActivity"
-            android:parentActivityName=".views.HelpActivity"/>
-        <activity android:name=".views.StoreActivity"
-            android:parentActivityName=".views.HomeActivity"/>
-        <activity android:name=".views.ScoreActivity"
-            android:parentActivityName=".views.HomeActivity"/>
-        <activity android:name=".views.ChatActivity"
-            android:parentActivityName=".views.ChatsActivity"/>
-        <activity android:name=".views.HelpActivity"
-            android:parentActivityName=".views.HomeActivity"/>
-        <activity android:name=".views.ReportActivity"
-            android:parentActivityName=".views.HelpActivity"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.BoardActivity"
+            android:parentActivityName=".views.HomeActivity" />
+        <activity
+            android:name=".views.MatchActivity"
+            android:parentActivityName=".views.HomeActivity" />
+        <activity
+            android:name=".views.ConfigurationActivity"
+            android:parentActivityName=".views.HelpActivity" />
+        <activity
+            android:name=".views.StoreActivity"
+            android:parentActivityName=".views.HomeActivity" />
+        <activity
+            android:name=".views.ScoreActivity"
+            android:parentActivityName=".views.HomeActivity" />
+        <activity
+            android:name=".views.ChatActivity"
+            android:parentActivityName=".views.ChatsActivity" />
+        <activity
+            android:name=".views.HelpActivity"
+            android:parentActivityName=".views.HomeActivity" />
+        <activity
+            android:name=".views.ReportActivity"
+            android:parentActivityName=".views.HelpActivity" />
         <activity android:name=".SendTempPassActivity" />
         <activity
             android:name=".views.ChatsActivity"
             android:label="@string/chats_title"
-            android:parentActivityName=".views.HomeActivity"/>
-        <activity android:name=".views.ProfileActivity"
-            android:parentActivityName=".views.ConfigurationActivity"/>
-        <activity android:name=".views.CreateChat"
-            android:parentActivityName=".views.ChatsActivity"/>
-        <activity android:name=".views.InventoryActivity"></activity>
+            android:parentActivityName=".views.HomeActivity" />
+        <activity
+            android:name=".views.ProfileActivity"
+            android:parentActivityName=".views.ConfigurationActivity" />
+        <activity
+            android:name=".views.CreateChat"
+            android:parentActivityName=".views.ChatsActivity" />
+        <activity android:name=".views.InventoryActivity" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="784815eed5bd1505440567de400ed55a430505c2" />
+
+        <activity android:name=".views.FindFriends"
+            android:parentActivityName=".views.HomeActivity"></activity>
     </application>
 
 </manifest>

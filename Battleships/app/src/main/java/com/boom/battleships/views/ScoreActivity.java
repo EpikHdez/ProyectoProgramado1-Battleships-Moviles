@@ -3,6 +3,7 @@ package com.boom.battleships.views;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
@@ -12,6 +13,7 @@ import com.boom.battleships.asynctasks.APICalls;
 import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
 import com.boom.battleships.model.User_Top;
+import com.boom.battleships.utils.BoomUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +24,7 @@ import java.util.List;
 
 public class ScoreActivity extends AppCompatActivity implements AsyncTaskRequester, ApiCaller {
     private ApiCaller caller;
+    private View overlay;
 
     public void setScores(JSONArray jsonArray){
         ListView scores;
@@ -50,12 +53,16 @@ public class ScoreActivity extends AppCompatActivity implements AsyncTaskRequest
                 R.layout.listview_score, userList);
         scores.setAdapter(adapter);
 
-
+        BoomUtils.animateView(overlay, View.GONE, 0, 200);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
+
+        overlay = findViewById(R.id.progress_overlay);
+        BoomUtils.animateView(overlay, View.VISIBLE, 04.f, 200);
+
         caller=this;
         APICalls.get("user/top",caller);
     }

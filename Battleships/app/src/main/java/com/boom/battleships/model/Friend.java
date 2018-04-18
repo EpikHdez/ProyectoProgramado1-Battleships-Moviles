@@ -13,6 +13,12 @@ public class Friend {
         this.picture = picture;
     }
 
+    public Friend(int id, String name, String picture) {
+        this.id = id;
+        this.name = name;
+        this.picture = picture;
+    }
+
     public int getFriendshipId() {
         return friendshipId;
     }

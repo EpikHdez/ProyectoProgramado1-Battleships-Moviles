@@ -23,8 +23,7 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
-public class ConfigurationActivity extends AppCompatActivity implements AsyncTaskRequester, ApiCaller {
-    private ApiCaller caller;
+public class ConfigurationActivity extends AppCompatActivity {
     private User user;
     SharedPreferences sharedpreferences;
     public static final String MyPREFERENCES = "MyPrefs" ;
@@ -41,9 +40,9 @@ public class ConfigurationActivity extends AppCompatActivity implements AsyncTas
         txtname.setText(user.getName());
         Button btnSound = findViewById(R.id.btnSound);
         if (user.isMusic()) {
-            btnSound.setText("No");
-        } else {
             btnSound.setText("Si");
+        } else {
+            btnSound.setText("No");
         }
 
 
@@ -53,7 +52,6 @@ public class ConfigurationActivity extends AppCompatActivity implements AsyncTas
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration);
         user= User.getInstance();
-        caller=this;
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         ImageView picture = findViewById(R.id.imgProfile);
         Picasso.get().load(user.getPicture()).into(picture);
@@ -61,9 +59,9 @@ public class ConfigurationActivity extends AppCompatActivity implements AsyncTas
         txtname.setText(user.getName());
         Button btnSound= findViewById(R.id.btnSound);
         if(user.isMusic()){
-            btnSound.setText("No");
-        }else{
             btnSound.setText("Si");
+        }else{
+            btnSound.setText("No");
         }
 
     }
@@ -100,20 +98,6 @@ public class ConfigurationActivity extends AppCompatActivity implements AsyncTas
         editor.commit();
 
 
-
-    }
-    @Override
-    public void receiveApiResponse(JSONObject response) {
-
-    }
-
-    @Override
-    public void receiveApiError(VolleyError error) {
-
-    }
-
-    @Override
-    public void receiveAsyncResponse(Object response) {
 
     }
 }

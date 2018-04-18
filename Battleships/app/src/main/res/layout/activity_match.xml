@@ -47,7 +47,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:text="Amigos de Facebook"
+            android:text="Amigos"
             android:textColor="@color/cardview_light_background"
             android:textSize="25sp" />
 
@@ -58,5 +58,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp" />
+
+        <include layout="@layout/progress_overlay" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

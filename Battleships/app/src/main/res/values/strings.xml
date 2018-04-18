@@ -33,4 +33,7 @@
     <string name="store">Tienda</string>
     <string name="title_activity_inventory">InventoryActivity</string>
 
+    <string name="friendAdded">Se ha agregado al usuario como amigo.</string>
+    <string name="noFriendAdded">No se ha podido agregar al usuario como amigo.</string>
+
 </resources>
