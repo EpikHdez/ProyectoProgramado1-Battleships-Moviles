@@ -46,7 +46,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class LoginActivity extends AppCompatActivity  implements AsyncTaskRequester, ApiCaller {
+public class LoginActivity extends AppCompatActivity  implements ApiCaller {
     //Facebook needed variables
     private CallbackManager cbManager;
     private LoginButton loginButton;
@@ -475,11 +475,6 @@ public class LoginActivity extends AppCompatActivity  implements AsyncTaskReques
 
         }
 
-
-    }
-
-    @Override
-    public void receiveAsyncResponse(Object response) {
 
     }
 }

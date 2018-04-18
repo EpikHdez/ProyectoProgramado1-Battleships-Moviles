@@ -106,17 +106,8 @@
                     android:textColor="@color/colorAccentLight" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/lblRecoverPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:onClick="onLblRecoverPasswordClicked"
-                android:text="@string/lblRecoverPassword"
-                android:textAlignment="center"
-                android:textColor="@color/cardview_light_background"
-                android:textSize="18sp" />
         </LinearLayout>
+
+        <include layout="@layout/progress_overlay" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

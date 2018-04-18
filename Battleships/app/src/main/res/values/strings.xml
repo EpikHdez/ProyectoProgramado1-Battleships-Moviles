@@ -21,6 +21,8 @@
     <string name="btnRegister">Registrarse</string>
     <string name="lblRecoverPassword"><u>Recuperar contraseña</u></string>
     <string name="selectImage">Seleccionar imagen</string>
+    <string name="emailDuplicated">El email ingresado ya se encuentra registrado en el sistema.</string>
+    <string name="cantBeBlank">Por favor rellene todas las casillas para continuar.</string>
     <string name="title_activity_board">BoardActivity</string>
     <!-- Strings related to register activity -->
 
