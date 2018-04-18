@@ -16,20 +16,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/txtSearch"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/border2"
-                android:hint="@string/search" />
-
             <ListView
                 android:id="@+id/listFriends"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
         </LinearLayout>
+
+        <include layout="@layout/progress_overlay" />
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -31,5 +31,7 @@
             android:layout_marginEnd="32dp"
             android:src="@drawable/add"
             app:backgroundTint="@color/colorPrimary" />
+
+        <include layout="@layout/progress_overlay" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

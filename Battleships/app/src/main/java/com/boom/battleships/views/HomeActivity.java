@@ -25,7 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements AsyncTaskRequester, ApiCaller {
+public class HomeActivity extends AppCompatActivity implements ApiCaller {
     User user;
     private ApiCaller caller;
     private int flag;
@@ -178,11 +178,6 @@ public class HomeActivity extends AppCompatActivity implements AsyncTaskRequeste
 
     @Override
     public void receiveApiError(VolleyError error) {
-
-    }
-
-    @Override
-    public void receiveAsyncResponse(Object response) {
 
     }
 }

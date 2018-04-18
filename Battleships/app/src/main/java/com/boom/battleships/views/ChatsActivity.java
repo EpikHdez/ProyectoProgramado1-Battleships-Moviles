@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.VideoView;
 
 import com.android.volley.VolleyError;
 import com.boom.battleships.R;
@@ -16,6 +17,7 @@ import com.boom.battleships.asynctasks.APICalls;
 import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.model.Friend;
 import com.boom.battleships.model.User;
+import com.boom.battleships.utils.BoomUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,11 +27,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ChatsActivity extends AppCompatActivity implements ApiCaller {
+    private View overlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chats);
+
+        overlay = findViewById(R.id.progress_overlay);
 
         FloatingActionButton fab = findViewById(R.id.createChatFab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -40,14 +45,12 @@ public class ChatsActivity extends AppCompatActivity implements ApiCaller {
             }
         });
 
+        BoomUtils.animateView(overlay, View.VISIBLE, 0.4f, 200);
         APICalls.get("user/chats", this);
     }
 
     @Override
     public void receiveApiResponse(JSONObject response) {
-        if(!response.has("chats"))
-            return;
-
         JSONArray chats = response.optJSONArray("chats");
         ArrayList<Friend> lChats = new ArrayList<>();
         JSONObject chat, jfriend;
@@ -84,6 +87,8 @@ public class ChatsActivity extends AppCompatActivity implements ApiCaller {
                 startActivity(intent);
             }
         });
+
+        BoomUtils.animateView(overlay, View.GONE, 0, 200);
     }
 
     @Override

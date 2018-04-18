@@ -16,6 +16,7 @@ import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.model.Chat;
 import com.boom.battleships.model.Friend;
 import com.boom.battleships.model.User;
+import com.boom.battleships.utils.BoomUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,12 +26,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CreateChat extends AppCompatActivity implements ApiCaller {
+    private View overlay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_chat);
 
+        overlay = findViewById(R.id.progress_overlay);
         APICalls.get("user/friends", this);
+        BoomUtils.animateView(overlay, View.VISIBLE, 0.4f, 200);
     }
 
     @Override
@@ -70,6 +75,8 @@ public class CreateChat extends AppCompatActivity implements ApiCaller {
                 startActivity(intent);
             }
         });
+
+        BoomUtils.animateView(overlay, View.GONE, 0, 200);
     }
 
     @Override
