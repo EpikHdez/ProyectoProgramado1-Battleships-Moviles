@@ -35,5 +35,8 @@
 
     <string name="friendAdded">Se ha agregado al usuario como amigo.</string>
     <string name="noFriendAdded">No se ha podido agregar al usuario como amigo.</string>
+    <string name="itemBought">Se ha comprado el item.</string>
+    <string name="noItemBought">No se ha comprado el item.</string>
+    <string name="itemUsed">Ya ha utilizado un item esta partida.</string>
 
 </resources>

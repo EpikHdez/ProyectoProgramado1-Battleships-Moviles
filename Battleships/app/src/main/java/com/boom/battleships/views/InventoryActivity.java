@@ -40,7 +40,7 @@ public class InventoryActivity extends AppCompatActivity implements AsyncTaskReq
                 String name= (String) itemN.get("name");
                 String picture= (String) itemN.get("picture");
                 int idItem= (int) itemN.get("id");
-                item = new ElementInventory(id, quantity, idItem, name, picture) ;
+                item = new ElementInventory(idItem, quantity, idItem, name, picture) ;
                 elementsList.add(item);
             } catch (JSONException e) {
                 e.printStackTrace();

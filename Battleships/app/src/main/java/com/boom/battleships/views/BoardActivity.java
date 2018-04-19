@@ -33,6 +33,7 @@ import com.boom.battleships.model.User;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +42,8 @@ import java.util.List;
 public class BoardActivity extends AppCompatActivity implements AsyncTaskRequester, ApiCaller {
     private ArrayList<Integer> board=new ArrayList<Integer>();
     private int state=0;
-    private int numbomb=1;
+    private int numbomb, maxBombs;
+    private int numShips;
     private User user;
     private ApiCaller caller;
     private int flag;
@@ -49,14 +51,56 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
     private JSONObject rivalBoard;
     private int destroy_ships;
     private int points_money;
+    private int requestForItem = 200;
+    private boolean itemUsed;
+
+
+    private TextView txtNumShips;
+
+
     public void openStoreActivity(View view) {
         Intent intent = new Intent(this, StoreActivity.class);
         startActivity(intent);
     }
     public void openInventoryActivity(View view) {
         Intent intent = new Intent(this, InventoryActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, requestForItem);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if(requestCode == requestForItem) {
+            useItem(data.getIntExtra("itemId", -1));
+        }
+    }
+
+    private void useItem(int itemId) {
+        if(itemId == -1) {
+            return;
+        }
+
+        if(itemUsed) {
+            Toast.makeText(this, R.string.itemUsed, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(itemId == 1 &&  !iniciada) {
+            numShips++;
+            txtNumShips.setText(String.valueOf(numShips));
+        } else if (itemId == 2 && iniciada) {
+            numbomb++;
+            maxBombs++;
+        }
+
+        itemUsed = true;
+    }
+
     public void sendBoard(View view){
         if(!iniciada) {
             flag = 1;
@@ -68,6 +112,7 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
+                            finish();
                         }
                     });
             alertDialog.show();
@@ -77,8 +122,6 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
 
         }
         findViewById(R.id.btnSendBoard).setEnabled(false);
-
-
 
     }
     public void openHomeActivity() {
@@ -103,92 +146,107 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
     }
     public void sendBomb(){
         flag=2;
-        int index= board.indexOf(2);
-        try {
-            String sindex=String.valueOf(index);
-            Log.d("sindex",sindex);
-            int boat= rivalBoard.getInt(sindex);
-            final GridLayout boardGame= findViewById(R.id.boardGame);
+        int index;
 
-            View view= (View) boardGame.getChildAt(index);
-            ImageView imageView=view.findViewById(R.id.image);
-            TextView points=findViewById(R.id.txtNumPoints);
-
-            String pointsS= (String) points.getText();
-
-            int pointsI= Integer.parseInt(pointsS);
-            points_money=pointsI;
-
-
-            if(boat==1){
-
-               imageView.setImageResource(R.drawable.win);
-               rivalBoard.put(sindex,4);
-               pointsI+=100;
-
-               destroy_ships+=1;
-                Log.d("boats", String.valueOf(Collections.frequency(convertJsontoBoardArray(rivalBoard), 1)));
-                AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-                alertDialog.setTitle(":)");
-                alertDialog.setMessage("Le ha dado a un barco.");
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-
-                                openHomeActivity(); // Call once you redirect to another activity
-                            }
-                        });
-                alertDialog.show();
-
-            }else{
-                AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-                alertDialog.setTitle(":(");
-                alertDialog.setMessage("No le ha dado a ningún barco.");
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                openHomeActivity();
-                            }
-                        });
-                alertDialog.show();
-                imageView.setImageResource(R.drawable.fail);
-                rivalBoard.put(sindex,5);
-
-            }
-            if(Collections.frequency(convertJsontoBoardArray(rivalBoard), 1)!=0) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("board", rivalBoard.toString());
-                jsonObject.put("score", pointsI);
-                jsonObject.put("destroyed_ships", destroy_ships);
-                APICalls.put("user/match/" + String.valueOf(user.getCurrentGame()), jsonObject, caller);
-            }else{
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("board", rivalBoard.toString());
-                jsonObject.put("score", pointsI);
-                jsonObject.put("destroyed_ships", destroy_ships);
-                jsonObject.put("finished", true);
-                jsonObject.put("victory", true);
-
-                APICalls.put("user/match/" + String.valueOf(user.getCurrentGame()), jsonObject, caller);
-                AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-                alertDialog.setTitle("¡Felicidades!");
-                alertDialog.setMessage("Ha ganado la partida.");
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                openHomeActivity();
-                            }
-                        });
-                alertDialog.show();
+        for(int i = 0; i < board.size(); i++) {
+            if (board.get(i) != 2) {
+                continue;
             }
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+            index = i;
+
+            try {
+                String sindex = String.valueOf(index);
+                Log.d("sindex", sindex);
+                int boat = rivalBoard.getInt(sindex);
+                final GridLayout boardGame = findViewById(R.id.boardGame);
+
+                View view = (View) boardGame.getChildAt(index);
+                ImageView imageView = view.findViewById(R.id.image);
+                TextView points = findViewById(R.id.txtNumPoints);
+
+                String pointsS = (String) points.getText();
+
+                int pointsI = Integer.parseInt(pointsS);
+                points_money = pointsI;
+
+
+                if (boat == 1) {
+
+                    imageView.setImageResource(R.drawable.win);
+                    rivalBoard.put(sindex, 4);
+                    pointsI += 100;
+
+                    destroy_ships += 1;
+                    Log.d("boats", String.valueOf(Collections.frequency(convertJsontoBoardArray(rivalBoard), 1)));
+                    AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+                    alertDialog.setTitle(":)");
+                    alertDialog.setMessage("Le ha dado a un barco.");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+
+                                    if(--maxBombs > 0)
+                                        return;
+
+                                    openHomeActivity(); // Call once you redirect to another activity
+                                }
+                            });
+                    alertDialog.show();
+
+                } else {
+                    AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+                    alertDialog.setTitle(":(");
+                    alertDialog.setMessage("No le ha dado a ningún barco.");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+
+                                    if(--maxBombs > 0)
+                                        return;
+
+                                    openHomeActivity();
+                                }
+                            });
+                    alertDialog.show();
+                    imageView.setImageResource(R.drawable.fail);
+                    rivalBoard.put(sindex, 5);
+
+                }
+                if (Collections.frequency(convertJsontoBoardArray(rivalBoard), 1) != 0) {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("board", rivalBoard.toString());
+                    jsonObject.put("score", pointsI);
+                    jsonObject.put("destroyed_ships", destroy_ships);
+                    APICalls.put("user/match/" + String.valueOf(user.getCurrentGame()), jsonObject, caller);
+                } else {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("board", rivalBoard.toString());
+                    jsonObject.put("score", pointsI);
+                    jsonObject.put("destroyed_ships", destroy_ships);
+                    jsonObject.put("finished", true);
+                    jsonObject.put("victory", true);
+
+                    APICalls.put("user/match/" + String.valueOf(user.getCurrentGame()), jsonObject, caller);
+                    AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+                    alertDialog.setTitle("¡Felicidades!");
+                    alertDialog.setMessage("Ha ganado la partida.");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    openHomeActivity();
+                                }
+                            });
+                    alertDialog.show();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-
 
     }
     public void createBoard(){
@@ -281,14 +339,12 @@ public class BoardActivity extends AppCompatActivity implements AsyncTaskRequest
         Log.d("CurrentGame", String.valueOf(user.getCurrentGame()));
         APICalls.get("user/match/"+String.valueOf(user.getCurrentGame()),caller);
 
+        numbomb = maxBombs = 1;
+        numShips = 5;
+        itemUsed = false;
 
-
-
-
-
-
-
-
+        txtNumShips = findViewById(R.id.txtNumBoats);
+        txtNumShips.setText(String.valueOf(numShips));
 
     }
     public void loadBoard(JSONObject boardrival){

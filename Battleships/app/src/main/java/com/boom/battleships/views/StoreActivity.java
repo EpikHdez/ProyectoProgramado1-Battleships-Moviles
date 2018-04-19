@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.boom.battleships.R;
@@ -28,6 +29,7 @@ public class StoreActivity extends AppCompatActivity implements AsyncTaskRequest
     private ApiCaller caller;
     User user;
     private View overlay;
+    private int flag;
 
     public void setElements(JSONArray jsonArray){
         ListView elements;
@@ -74,29 +76,48 @@ public class StoreActivity extends AppCompatActivity implements AsyncTaskRequest
         Log.d("Money1",money);
         moneyTXT.setText(money);
 
+        flag = 0;
         APICalls.get("item",caller);
 
 
 
     }
 
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
+
     @Override
     public void receiveApiResponse(JSONObject response) {
-        Log.d("ResponseStore",response.toString());
-        JSONArray items= null;
-        try {
-            items = response.getJSONArray("items");
-            setElements(items);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        switch (flag) {
+            case  0:
+                Log.d("ResponseStore",response.toString());
+                JSONArray items= null;
+                try {
+                    items = response.getJSONArray("items");
+                    setElements(items);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case 1:
+                Toast.makeText(this, R.string.itemBought, Toast.LENGTH_LONG).show();
         }
+
 
 
     }
 
     @Override
     public void receiveApiError(VolleyError error) {
+        switch (flag) {
+            case 0:
+                break;
 
+            case 1:
+                Toast.makeText(this, R.string.noItemBought, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

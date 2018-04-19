@@ -39,6 +39,7 @@ public class MatchActivity extends AppCompatActivity implements AsyncTaskRequest
     private void openBoardActivity() {
         Intent intent = new Intent(this, BoardActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override

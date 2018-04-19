@@ -18,6 +18,7 @@ import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
 import com.boom.battleships.model.Element;
 import com.boom.battleships.model.User;
+import com.boom.battleships.views.StoreActivity;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -42,12 +43,16 @@ public class CustomListStoreAdapter extends ArrayAdapter<Element> implements Asy
     public void receiveApiResponse(JSONObject response) {
         Log.d("RESPONSEBUY",response.toString());
 
-
+        StoreActivity parent = (StoreActivity) context;
+        parent.setFlag(1);
+        parent.receiveApiResponse(response);
     }
 
     @Override
     public void receiveApiError(VolleyError error) {
-
+        StoreActivity parent = (StoreActivity) context;
+        parent.setFlag(1);
+        parent.receiveApiError(error);
     }
 
     @Override

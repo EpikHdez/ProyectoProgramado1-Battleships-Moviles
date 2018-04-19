@@ -2,6 +2,7 @@ package com.boom.battleships.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.boom.battleships.asynctasks.APICalls;
 import com.boom.battleships.interfaces.ApiCaller;
 import com.boom.battleships.interfaces.AsyncTaskRequester;
 import com.boom.battleships.model.ElementInventory;
+import com.boom.battleships.views.InventoryActivity;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
@@ -30,16 +32,19 @@ import java.util.List;
 public class CustomListInventoryAdapter extends ArrayAdapter<ElementInventory> implements AsyncTaskRequester, ApiCaller {
     Context context;
     private ApiCaller caller;
+    private int flag;
+    private int itemId;
+
     public CustomListInventoryAdapter(Context context, int resourceId,
                                       List<ElementInventory> items) {
         super(context, resourceId, items);
         this.context = context;
+        caller = this;
     }
 
     @Override
     public void receiveApiResponse(JSONObject response) {
         Log.d("RESPONSEBUY",response.toString());
-
 
     }
 
@@ -65,7 +70,6 @@ public class CustomListInventoryAdapter extends ArrayAdapter<ElementInventory> i
 
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        caller=this;
         CustomListInventoryAdapter.ViewHolderElementInventory holder = null;
         final ElementInventory element = getItem(position);
         Log.d("position", String.valueOf(position));
@@ -95,12 +99,16 @@ public class CustomListInventoryAdapter extends ArrayAdapter<ElementInventory> i
 
             public void onClick(View v) {
                 // TODO Auto-generated method stub
+                int id = element.getId();
                 JSONObject jsonObject=new JSONObject();
-                APICalls.put("user/item/"+String.valueOf(element.getIdItem()),jsonObject,caller);
-
-
-
-
+                flag = 0;
+                itemId = id;
+                APICalls.put("user/item/"+String.valueOf(id),jsonObject,caller);
+                InventoryActivity parent = (InventoryActivity) context;
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("itemId", itemId);
+                parent.setResult(Activity.RESULT_OK, resultIntent);
+                parent.finish();
             }
         });
 
